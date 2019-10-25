@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true">
+
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoders are assigned the type
+             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-4relative [%thread] %-5level %logger{35} - %msg %n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="accessLog" class="ch.qos.logback.core.FileAppender">
+        <file>logs/access_log.log</file>
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="async" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="accessLog" />
+    </appender>
+
+
+    <!-- known bug with swagger springfox https://github.com/springfox/springfox/issues/1100 -->
+    <logger name="io.swagger.models.parameters.AbstractSerializableParameter" level="ERROR" additivity="false"/>
+
+    <logger name="com.ionos.domains.contact" level="info" additivity="false">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="accessLog" />
+    </logger>
+
+    <logger name="com.zaxxer.hikari" level="info" additivity="false">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="accessLog" />
+    </logger>
+
+    <root>
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="accessLog" />
+    </root>
+
+</configuration>
