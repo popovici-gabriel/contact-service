@@ -323,23 +323,6 @@
             </plugin>
 
             <plugin>
-                <groupId>net.revelc.code.formatter</groupId>
-                <artifactId>formatter-maven-plugin</artifactId>
-                <version>2.7.0</version>
-                <configuration>
-                    <configFile>${project.basedir}/dr-code-style.xml</configFile>
-                    <lineEnding>AUTO</lineEnding>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>format</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.3</version>
