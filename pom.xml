@@ -63,13 +63,6 @@
             <version>${springfox.version}</version>
         </dependency>
 
-        <!--Internal dependencies -->
-        <!--<dependency>
-            <groupId>domain-registration-system</groupId>
-            <artifactId>domain-model</artifactId>
-            <version>${domain.model.version}</version>
-        </dependency>-->
-
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
