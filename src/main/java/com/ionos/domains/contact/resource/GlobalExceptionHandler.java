@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler
 	public ResponseEntity handleException(MethodArgumentNotValidException exception) {
 		// @formatter:off
-		return  ResponseEntity.badRequest().build();
+		return ResponseEntity.badRequest().build();
 		// @formatter:on
 	}
 }
