@@ -64,11 +64,11 @@
         </dependency>
 
         <!--Internal dependencies -->
-        <dependency>
+        <!--<dependency>
             <groupId>domain-registration-system</groupId>
             <artifactId>domain-model</artifactId>
             <version>${domain.model.version}</version>
-        </dependency>
+        </dependency>-->
 
         <dependency>
             <groupId>com.zaxxer</groupId>
