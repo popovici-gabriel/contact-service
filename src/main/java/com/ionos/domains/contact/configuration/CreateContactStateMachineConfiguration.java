@@ -67,13 +67,17 @@ public class CreateContactStateMachineConfiguration
 	@Override
 	public void configure(StateMachineStateConfigurer<CreateContactState, CreateContactEvent> states) throws Exception {
 		// @formatter:off
-		states.withStates().initial(CreateContactState.START).state(CreateContactState.CONTACT_REGISTRY_INITIATED)
+		states
+				.withStates()
+				.initial(CreateContactState.START)
+				.state(CreateContactState.CONTACT_REGISTRY_INITIATED)
 				.state(CreateContactState.CONTACT_REGISTRY_SUCCESS)
 
 				.state(CreateContactState.CONTACT_PERSISTENCE_INITIATED)
 				.state(CreateContactState.CONTACT_PERSISTENCE_SUCCESS)
 
-				.end(CreateContactState.CONTACT_REGISTRY_ERROR).end(CreateContactState.CONTACT_PERSISTENCE_ERROR)
+				.end(CreateContactState.CONTACT_REGISTRY_ERROR)
+				.end(CreateContactState.CONTACT_PERSISTENCE_ERROR)
 				.end(CreateContactState.END);
 		// @formatter:on
 	}
@@ -82,32 +86,47 @@ public class CreateContactStateMachineConfiguration
 	public void configure(StateMachineTransitionConfigurer<CreateContactState, CreateContactEvent> transitions)
 			throws Exception {
 		// @formatter:off
-		transitions.withExternal().source(CreateContactState.START)
-				.target(CreateContactState.CONTACT_REGISTRY_INITIATED).event(CreateContactEvent.START)
-				.action(this::contactRegistryInitiated).and()
+		transitions
+				.withExternal()
+					.source(CreateContactState.START).target(CreateContactState.CONTACT_REGISTRY_INITIATED)
+					.event(CreateContactEvent.START)
+					.action(this::contactRegistryInitiated)
+					.and()
 
-				.withExternal().source(CreateContactState.CONTACT_REGISTRY_INITIATED)
-				.target(CreateContactState.CONTACT_REGISTRY_SUCCESS).event(CreateContactEvent.CONTACT_REGISTRY_SUCCESS)
-				.action(this::contactRegistrySuccess).and()
+				.withExternal()
+					.source(CreateContactState.CONTACT_REGISTRY_INITIATED).target(CreateContactState.CONTACT_REGISTRY_SUCCESS)
+					.event(CreateContactEvent.CONTACT_REGISTRY_SUCCESS)
+					.action(this::contactRegistrySuccess)
+					.and()
 
-				.withExternal().source(CreateContactState.CONTACT_REGISTRY_INITIATED)
-				.target(CreateContactState.CONTACT_REGISTRY_ERROR).event(CreateContactEvent.CONTACT_REGISTRY_ERROR)
-				.action(this::contactRegistryError).and()
+				.withExternal()
+					.source(CreateContactState.CONTACT_REGISTRY_INITIATED).target(CreateContactState.CONTACT_REGISTRY_ERROR)
+					.event(CreateContactEvent.CONTACT_REGISTRY_ERROR)
+					.action(this::contactRegistryError)
+					.and()
 
-				.withExternal().source(CreateContactState.CONTACT_REGISTRY_SUCCESS)
-				.target(CreateContactState.CONTACT_PERSISTENCE_INITIATED)
-				.event(CreateContactEvent.CONTACT_PERSISTENCE_INITIATED).action(this::contactPersistenceInitiated).and()
+				.withExternal()
+					.source(CreateContactState.CONTACT_REGISTRY_SUCCESS).target(CreateContactState.CONTACT_PERSISTENCE_INITIATED)
+					.event(CreateContactEvent.CONTACT_PERSISTENCE_INITIATED)
+					.action(this::contactPersistenceInitiated)
+					.and()
 
-				.withExternal().source(CreateContactState.CONTACT_PERSISTENCE_INITIATED)
-				.target(CreateContactState.CONTACT_PERSISTENCE_SUCCESS)
-				.event(CreateContactEvent.CONTACT_PERSISTENCE_SUCCESS).action(this::contactPersistenceSuccess).and()
+				.withExternal()
+					.source(CreateContactState.CONTACT_PERSISTENCE_INITIATED).target(CreateContactState.CONTACT_PERSISTENCE_SUCCESS)
+					.event(CreateContactEvent.CONTACT_PERSISTENCE_SUCCESS)
+					.action(this::contactPersistenceSuccess)
+					.and()
 
-				.withExternal().source(CreateContactState.CONTACT_PERSISTENCE_INITIATED)
-				.target(CreateContactState.CONTACT_PERSISTENCE_ERROR)
-				.event(CreateContactEvent.CONTACT_PERSISTENCE_ERROR).action(this::contactPersistenceError).and()
+				.withExternal()
+					.source(CreateContactState.CONTACT_PERSISTENCE_INITIATED).target(CreateContactState.CONTACT_PERSISTENCE_ERROR)
+					.event(CreateContactEvent.CONTACT_PERSISTENCE_ERROR)
+					.action(this::contactPersistenceError)
+					.and()
 
-				.withExternal().source(CreateContactState.CONTACT_PERSISTENCE_SUCCESS).target(CreateContactState.END)
-				.event(CreateContactEvent.STOP).action(this::createContactEnd);
+				.withExternal()
+					.source(CreateContactState.CONTACT_PERSISTENCE_SUCCESS).target(CreateContactState.END)
+					.event(CreateContactEvent.STOP)
+					.action(this::createContactEnd);
 		// @formatter:on
 	}
 
