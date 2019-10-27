@@ -1,9 +1,10 @@
 package com.ionos.domains.contact.configuration;
 
-import static com.ionos.domains.contact.model.StateMachineHeaders.EVENT;
-import static com.ionos.domains.contact.model.StateMachineHeaders.OPERATION;
-import static java.util.Objects.requireNonNull;
-import java.util.Date;
+import com.ionos.domains.contact.event.Event;
+import com.ionos.domains.contact.model.CreateContactEvent;
+import com.ionos.domains.contact.model.CreateContactState;
+import com.ionos.domains.contact.model.Operation;
+import com.ionos.domains.contact.service.OperationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,25 +17,23 @@ import org.springframework.statemachine.config.StateMachineFactory;
 import org.springframework.statemachine.config.builders.StateMachineConfigurationConfigurer;
 import org.springframework.statemachine.config.builders.StateMachineStateConfigurer;
 import org.springframework.statemachine.config.builders.StateMachineTransitionConfigurer;
-import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 import org.springframework.statemachine.persist.StateMachineRuntimePersister;
 import org.springframework.statemachine.service.DefaultStateMachineService;
 import org.springframework.statemachine.service.StateMachineService;
-import org.springframework.statemachine.state.State;
-import com.ionos.domains.contact.event.Event;
-import com.ionos.domains.contact.model.CreateContactEvent;
-import com.ionos.domains.contact.model.CreateContactState;
-import com.ionos.domains.contact.model.Operation;
-import com.ionos.domains.contact.resource.JobServiceClient;
-import com.ionos.domains.contact.service.OperationService;
+
+import java.util.Date;
+
+import static com.ionos.domains.contact.model.StateMachineHeaders.EVENT;
+import static com.ionos.domains.contact.model.StateMachineHeaders.OPERATION;
+import static java.util.Objects.requireNonNull;
 
 @Configuration
 @EnableStateMachineFactory
-public class CreateContactStateMachineConfiguration
+public class CreateContactUsingChoiceStateMachineConfiguration
 		extends
 			EnumStateMachineConfigurerAdapter<CreateContactState, CreateContactEvent> {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(CreateContactStateMachineConfiguration.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CreateContactUsingChoiceStateMachineConfiguration.class);
 
 	@Autowired
 	private StateMachineRuntimePersister<CreateContactState, CreateContactEvent, String> stateMachineRuntimePersister;
@@ -53,7 +52,7 @@ public class CreateContactStateMachineConfiguration
 
 		config
 				.withConfiguration()
-				.machineId("create-contact")
+				.machineId("create-contact-with-choices")
 				.autoStartup(true)
 				.listener(new CreateContactAdapter());
 		// @formatter:on
@@ -66,13 +65,11 @@ public class CreateContactStateMachineConfiguration
 				.withStates()
 				.initial(CreateContactState.START)
 				.state(CreateContactState.CONTACT_REGISTRY_INITIATED)
-				.state(CreateContactState.CONTACT_REGISTRY_SUCCESS)
+				.state(CreateContactState.CONTACT_REGISTRY_CHOICE)
 
 				.state(CreateContactState.CONTACT_PERSISTENCE_INITIATED)
-				.state(CreateContactState.CONTACT_PERSISTENCE_SUCCESS)
+				.state(CreateContactState.CONTACT_PERSISTENCE_CHOICE)
 
-				.end(CreateContactState.CONTACT_REGISTRY_ERROR)
-				.end(CreateContactState.CONTACT_PERSISTENCE_ERROR)
 				.end(CreateContactState.END);
 		// @formatter:on
 	}
