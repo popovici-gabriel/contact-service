@@ -23,7 +23,7 @@ public class ChoiceStateMachine extends EnumStateMachineConfigurerAdapter<Create
                 .initial(CreateContactState.START) // start
                 .state(CreateContactState.CONTACT_REGISTRY_INITIATED) //initiated
                 .choice(CreateContactState.CONTACT_REGISTRY_CHOICE) // choice
-                .end(CreateContactState.CONTACT_REGISTRY_ERROR)   // end
+                .state(CreateContactState.CONTACT_REGISTRY_ERROR)   // end
                 .end(CreateContactState.END) //end
                 .states(EnumSet.allOf(CreateContactState.class));
     }
