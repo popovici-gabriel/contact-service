@@ -12,7 +12,7 @@
     </appender>
 
     <appender name="accessLog" class="ch.qos.logback.core.FileAppender">
-        <file>logs/access_log.log</file>
+        <file>logs/contact-service.log</file>
         <encoder>
             <pattern>%msg%n</pattern>
         </encoder>
