@@ -14,22 +14,22 @@ import static com.ionos.domains.contact.model.StateMachineHeaders.EVENT;
 public class CreatePersistenceAction extends CommonAction {
 
     @Autowired
-    public CreatePersistenceAction(OperationService operationService) {
-        super(operationService);
+    public CreatePersistenceAction(OperationService operationService, CreateContactService createContactService) {
+        super(operationService, createContactService);
     }
 
     void contactPersistenceInitiated(StateContext<CreateContactState, CreateContactEvent> context) {
-        final var event = (Event) context.getMessageHeader(EVENT.getHeader());
+        final var event = (Event) context.getMessageHeader(EVENT.header());
         updateState(event, context.getTarget().getId());
     }
 
     void contactPersistenceSuccess(StateContext<CreateContactState, CreateContactEvent> context) {
-        final var event = (Event) context.getMessageHeader(EVENT.getHeader());
+        final var event = (Event) context.getMessageHeader(EVENT.header());
         updateState(event, context.getTarget().getId());
     }
 
     void contactPersistenceError(StateContext<CreateContactState, CreateContactEvent> context) {
-        final var event = (Event) context.getMessageHeader(EVENT.getHeader());
+        final var event = (Event) context.getMessageHeader(EVENT.header());
         updateState(event, context.getTarget().getId());
         operationService.updateRunningFlag(event.getOperationId());
     }

@@ -86,7 +86,9 @@ public class ContactResource {
 		}
 
 		final Operation operation = contactService.createContactOperation(parameters, tenant, externalCorrelationId);
-		return ResponseEntity.created(buildURI(request, operation.getCorrelationId()))
+
+		return ResponseEntity
+				.created(buildURI(request, operation.getCorrelationId()))
 				.body(operation.getCorrelationId());
 		// @formatter:on
 	}

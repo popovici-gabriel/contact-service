@@ -13,8 +13,11 @@ public abstract class CommonAction {
 
     protected final OperationService operationService;
 
-    protected CommonAction(OperationService operationService) {
+    protected final CreateContactService createContactService;
+
+    protected CommonAction(OperationService operationService, CreateContactService createContactService) {
         this.operationService = requireNonNull(operationService);
+        this.createContactService = requireNonNull(createContactService);
     }
 
     protected Operation updateState(final Event event, CreateContactState toState) {

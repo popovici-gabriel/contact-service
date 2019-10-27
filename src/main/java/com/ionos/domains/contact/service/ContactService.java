@@ -33,12 +33,24 @@ public class ContactService {
 
 	public Operation createContactOperation(String parameters, String tenant, String externalCorrelationId) {
 		// @formatter:off
-		final var operation = OperationBuilder.builder().tenant(tenant).parameters(parameters).type(Type.CRATE_CONTACT)
-				.state(CreateContactState.CONTACT_REGISTRY_INITIATED).externalCorrelationId(externalCorrelationId)
+		final var operation = OperationBuilder
+				.builder()
+				.tenant(tenant)
+				.parameters(parameters)
+				.type(Type.CRATE_CONTACT)
+				.state(CreateContactState.CONTACT_REGISTRY_INITIATED)
+				.externalCorrelationId(externalCorrelationId)
 				.build();
+
 		LOGGER.info("About to start operation: {}", operation);
-		stateMachineService.acquireStateMachine(operation.getCorrelationId(), true).sendEvent(MessageBuilder
-				.withPayload(CreateContactEvent.START).setHeaderIfAbsent(OPERATION.getHeader(), operation).build());
+
+		stateMachineService
+				.acquireStateMachine(operation.getCorrelationId(), true)
+				.sendEvent(MessageBuilder
+				.withPayload(CreateContactEvent.START)
+				.setHeaderIfAbsent(OPERATION.header(), operation)
+				.build());
+
 		return operation;
 		// @formatter:on
 	}
@@ -67,7 +79,7 @@ public class ContactService {
 	private void sendEvent(Event event) {
 		// @formatter:off
 		if (!stateMachineService.acquireStateMachine(event.getOperationId(), false).sendEvent(MessageBuilder
-				.withPayload(event.getCreateContactEvent()).setHeaderIfAbsent(EVENT.getHeader(), event).build())) {
+				.withPayload(event.getCreateContactEvent()).setHeaderIfAbsent(EVENT.header(), event).build())) {
 			LOGGER.error("Operation Id [{}] in state [{}] not processed", event.getOperationId(),
 					event.getCreateContactEvent());
 		}

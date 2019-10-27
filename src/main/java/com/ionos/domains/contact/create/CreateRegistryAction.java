@@ -1,39 +1,41 @@
 package com.ionos.domains.contact.create;
 
-import com.ionos.domains.contact.event.Event;
 import com.ionos.domains.contact.model.CreateContactEvent;
 import com.ionos.domains.contact.model.CreateContactState;
-import com.ionos.domains.contact.model.Operation;
+import com.ionos.domains.contact.model.MessageHeaders;
 import com.ionos.domains.contact.service.OperationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.statemachine.StateContext;
 import org.springframework.stereotype.Component;
 
-import static com.ionos.domains.contact.model.StateMachineHeaders.EVENT;
-import static com.ionos.domains.contact.model.StateMachineHeaders.OPERATION;
+import java.util.Optional;
 
 @Component
 public class CreateRegistryAction extends CommonAction {
 
     @Autowired
-    public CreateRegistryAction(OperationService operationService) {
-        super(operationService);
+    public CreateRegistryAction(OperationService operationService,
+                                CreateContactService createContactService) {
+        super(operationService, createContactService);
     }
 
     void contactRegistryInitiated(StateContext<CreateContactState, CreateContactEvent> context) {
-        final var operation = (Operation) context.getMessageHeader(OPERATION.getHeader());
-        operationService.insert(operation);
     }
 
     void contactRegistrySuccess(StateContext<CreateContactState, CreateContactEvent> context) {
-        final var event = (Event) context.getMessageHeader(EVENT.getHeader());
-        updateState(event, context.getTarget().getId());
     }
 
     void contactRegistryError(StateContext<CreateContactState, CreateContactEvent> context) {
-        final var event = (Event) context.getMessageHeader(EVENT.getHeader());
-        updateState(event, context.getTarget().getId());
-        operationService.updateRunningFlag(event.getOperationId());
     }
 
+    public void postContact(StateContext<CreateContactState, CreateContactEvent> context) {
+    }
+
+    public void sendContactRegistryInitiated(StateContext<CreateContactState, CreateContactEvent> context) {
+        var instanceId = Optional.of(context.getMessageHeader(MessageHeaders.INSTANCE_ID))
+                .filter(String.class::isInstance)
+                .map(String.class::cast)
+                .orElseThrow(() -> new RuntimeException("header is not present"));
+        createContactService.signal(instanceId, CreateContactEvent.CONTACT_REGISTRY_INITIATED);
+    }
 }

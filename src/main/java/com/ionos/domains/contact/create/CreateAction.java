@@ -14,12 +14,12 @@ import static com.ionos.domains.contact.model.StateMachineHeaders.EVENT;
 public class CreateAction extends CommonAction {
 
     @Autowired
-    public CreateAction(OperationService operationService) {
-        super(operationService);
+    public CreateAction(OperationService operationService, CreateContactService createContactService) {
+        super(operationService, createContactService);
     }
 
     void createContactEnd(StateContext<CreateContactState, CreateContactEvent> context) {
-        final var event = (Event) context.getMessageHeader(EVENT.getHeader());
+        final var event = (Event) context.getMessageHeader(EVENT.header());
         operationService.updateRunningFlag(event.getOperationId());
     }
 }

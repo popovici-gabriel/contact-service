@@ -16,16 +16,13 @@ import org.springframework.statemachine.config.StateMachineFactory;
 import org.springframework.statemachine.config.builders.StateMachineConfigurationConfigurer;
 import org.springframework.statemachine.config.builders.StateMachineStateConfigurer;
 import org.springframework.statemachine.config.builders.StateMachineTransitionConfigurer;
-import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 import org.springframework.statemachine.persist.StateMachineRuntimePersister;
 import org.springframework.statemachine.service.DefaultStateMachineService;
 import org.springframework.statemachine.service.StateMachineService;
-import org.springframework.statemachine.state.State;
 import com.ionos.domains.contact.event.Event;
 import com.ionos.domains.contact.model.CreateContactEvent;
 import com.ionos.domains.contact.model.CreateContactState;
 import com.ionos.domains.contact.model.Operation;
-import com.ionos.domains.contact.resource.JobServiceClient;
 import com.ionos.domains.contact.service.OperationService;
 
 @Configuration
@@ -133,39 +130,39 @@ public class CreateContactStateMachineConfiguration
 	}
 
 	private void contactRegistryInitiated(StateContext<CreateContactState, CreateContactEvent> context) {
-		final var operation = (Operation) context.getMessageHeader(OPERATION.getHeader());
+		final var operation = (Operation) context.getMessageHeader(OPERATION.header());
 		operationService.insert(operation);
 	}
 
 	private void contactRegistrySuccess(StateContext<CreateContactState, CreateContactEvent> context) {
-		final var event = (Event) context.getMessageHeader(EVENT.getHeader());
+		final var event = (Event) context.getMessageHeader(EVENT.header());
 		updateState(event, context.getTarget().getId());
 	}
 
 	private void contactRegistryError(StateContext<CreateContactState, CreateContactEvent> context) {
-		final var event = (Event) context.getMessageHeader(EVENT.getHeader());
+		final var event = (Event) context.getMessageHeader(EVENT.header());
 		updateState(event, context.getTarget().getId());
 		operationService.updateRunningFlag(event.getOperationId());
 	}
 
 	private void contactPersistenceInitiated(StateContext<CreateContactState, CreateContactEvent> context) {
-		final var event = (Event) context.getMessageHeader(EVENT.getHeader());
+		final var event = (Event) context.getMessageHeader(EVENT.header());
 		updateState(event, context.getTarget().getId());
 	}
 
 	private void contactPersistenceSuccess(StateContext<CreateContactState, CreateContactEvent> context) {
-		final var event = (Event) context.getMessageHeader(EVENT.getHeader());
+		final var event = (Event) context.getMessageHeader(EVENT.header());
 		updateState(event, context.getTarget().getId());
 	}
 
 	private void contactPersistenceError(StateContext<CreateContactState, CreateContactEvent> context) {
-		final var event = (Event) context.getMessageHeader(EVENT.getHeader());
+		final var event = (Event) context.getMessageHeader(EVENT.header());
 		updateState(event, context.getTarget().getId());
 		operationService.updateRunningFlag(event.getOperationId());
 	}
 
 	private void createContactEnd(StateContext<CreateContactState, CreateContactEvent> context) {
-		final var event = (Event) context.getMessageHeader(EVENT.getHeader());
+		final var event = (Event) context.getMessageHeader(EVENT.header());
 		operationService.updateRunningFlag(event.getOperationId());
 	}
 

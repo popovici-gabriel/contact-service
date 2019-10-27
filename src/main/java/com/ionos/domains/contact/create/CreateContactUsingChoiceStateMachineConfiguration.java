@@ -19,10 +19,12 @@ import org.springframework.statemachine.persist.StateMachineRuntimePersister;
 import org.springframework.statemachine.service.DefaultStateMachineService;
 import org.springframework.statemachine.service.StateMachineService;
 
+import static com.ionos.domains.contact.create.CreateChoiceGuard.createPersistenceChoice;
+import static com.ionos.domains.contact.create.CreateChoiceGuard.createRegistryChoice;
 import static com.ionos.domains.contact.model.CreateContactState.*;
 
-@Configuration
-@EnableStateMachineFactory
+//@Configuration
+//@EnableStateMachineFactory
 public class CreateContactUsingChoiceStateMachineConfiguration
 		extends
 			EnumStateMachineConfigurerAdapter<CreateContactState, CreateContactEvent> {
@@ -83,6 +85,8 @@ public class CreateContactUsingChoiceStateMachineConfiguration
 					.source(START).target(CONTACT_REGISTRY_INITIATED)
 					.event(CreateContactEvent.START)
 					.action(createRegistryAction::contactRegistryInitiated)
+					.action(createRegistryAction::postContact)
+					.action(createRegistryAction::sendContactRegistryInitiated)
 					.and()
 
 				.withExternal()
@@ -93,7 +97,7 @@ public class CreateContactUsingChoiceStateMachineConfiguration
 
 				.withChoice()
 					.source(CONTACT_REGISTRY_CHOICE)
-					.first(CONTACT_REGISTRY_SUCCESS,CreateChoiceGuard.createRegistryChoice())
+					.first(CONTACT_REGISTRY_SUCCESS, createRegistryChoice())
 					.last(CONTACT_REGISTRY_ERROR)
 					.and()
 
@@ -111,7 +115,7 @@ public class CreateContactUsingChoiceStateMachineConfiguration
 
 				.withChoice()
 					.source(CONTACT_PERSISTENCE_CHOICE)
-					.first(CONTACT_PERSISTENCE_SUCCESS, CreateChoiceGuard.createPersistenceChoice())
+					.first(CONTACT_PERSISTENCE_SUCCESS, createPersistenceChoice())
 					.last(CONTACT_PERSISTENCE_ERROR)
 					.and()
 
