@@ -19,6 +19,8 @@ import org.springframework.statemachine.persist.StateMachineRuntimePersister;
 import org.springframework.statemachine.service.DefaultStateMachineService;
 import org.springframework.statemachine.service.StateMachineService;
 
+import static com.ionos.domains.contact.model.CreateContactState.*;
+
 @Configuration
 @EnableStateMachineFactory
 public class CreateContactUsingChoiceStateMachineConfiguration
@@ -61,14 +63,14 @@ public class CreateContactUsingChoiceStateMachineConfiguration
 		// @formatter:off
 		states
 				.withStates()
-				.initial(CreateContactState.START)
-				.state(CreateContactState.CONTACT_REGISTRY_INITIATED)
-				.state(CreateContactState.CONTACT_REGISTRY_CHOICE)
+				.initial(START)
+				.state(CONTACT_REGISTRY_INITIATED)
+				.state(CONTACT_REGISTRY_CHOICE)
 
-				.state(CreateContactState.CONTACT_PERSISTENCE_INITIATED)
-				.state(CreateContactState.CONTACT_PERSISTENCE_CHOICE)
+				.state(CONTACT_PERSISTENCE_INITIATED)
+				.state(CONTACT_PERSISTENCE_CHOICE)
 
-				.end(CreateContactState.END);
+				.end(END);
 		// @formatter:on
 	}
 
@@ -78,43 +80,43 @@ public class CreateContactUsingChoiceStateMachineConfiguration
 		// @formatter:off
 		transitions
 				.withExternal()
-					.source(CreateContactState.START).target(CreateContactState.CONTACT_REGISTRY_INITIATED)
+					.source(START).target(CONTACT_REGISTRY_INITIATED)
 					.event(CreateContactEvent.START)
 					.action(createRegistryAction::contactRegistryInitiated)
 					.and()
 
 				.withExternal()
-					.source(CreateContactState.CONTACT_REGISTRY_INITIATED).target(CreateContactState.CONTACT_REGISTRY_SUCCESS)
-					.event(CreateContactEvent.CONTACT_REGISTRY_SUCCESS)
+					.source(CONTACT_REGISTRY_INITIATED).target(CONTACT_REGISTRY_CHOICE)
+					.event(CreateContactEvent.CONTACT_REGISTRY_INITIATED)
 					.action(createRegistryAction::contactRegistrySuccess)
 					.and()
 
-				.withExternal()
-					.source(CreateContactState.CONTACT_REGISTRY_INITIATED).target(CreateContactState.CONTACT_REGISTRY_ERROR)
-					.event(CreateContactEvent.CONTACT_REGISTRY_ERROR)
-					.action(createRegistryAction::contactRegistryError)
+				.withChoice()
+					.source(CONTACT_REGISTRY_CHOICE)
+					.first(CONTACT_REGISTRY_SUCCESS,CreateChoiceGuard.createRegistryChoice())
+					.last(CONTACT_REGISTRY_ERROR)
 					.and()
 
 				.withExternal()
-					.source(CreateContactState.CONTACT_REGISTRY_SUCCESS).target(CreateContactState.CONTACT_PERSISTENCE_INITIATED)
+					.source(CONTACT_REGISTRY_SUCCESS).target(CONTACT_PERSISTENCE_INITIATED)
 					.event(CreateContactEvent.CONTACT_PERSISTENCE_INITIATED)
 					.action(createPersistenceAction::contactPersistenceInitiated)
 					.and()
 
 				.withExternal()
-					.source(CreateContactState.CONTACT_PERSISTENCE_INITIATED).target(CreateContactState.CONTACT_PERSISTENCE_SUCCESS)
-					.event(CreateContactEvent.CONTACT_PERSISTENCE_SUCCESS)
+					.source(CONTACT_PERSISTENCE_INITIATED).target(CONTACT_PERSISTENCE_CHOICE)
+					.event(CreateContactEvent.CONTACT_PERSISTENCE_INITIATED)
 					.action(createPersistenceAction::contactPersistenceSuccess)
 					.and()
 
-				.withExternal()
-					.source(CreateContactState.CONTACT_PERSISTENCE_INITIATED).target(CreateContactState.CONTACT_PERSISTENCE_ERROR)
-					.event(CreateContactEvent.CONTACT_PERSISTENCE_ERROR)
-					.action(createPersistenceAction::contactPersistenceError)
+				.withChoice()
+					.source(CONTACT_PERSISTENCE_CHOICE)
+					.first(CONTACT_PERSISTENCE_SUCCESS, CreateChoiceGuard.createPersistenceChoice())
+					.last(CONTACT_PERSISTENCE_ERROR)
 					.and()
 
 				.withExternal()
-					.source(CreateContactState.CONTACT_PERSISTENCE_SUCCESS).target(CreateContactState.END)
+					.source(CONTACT_PERSISTENCE_SUCCESS).target(END)
 					.event(CreateContactEvent.STOP)
 					.action(createAction::createContactEnd);
 		// @formatter:on
