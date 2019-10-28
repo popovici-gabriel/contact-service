@@ -12,6 +12,10 @@ public class CreateContactAdapter extends StateMachineListenerAdapter {
     @Override
     public void stateChanged(State from, State to) {
         super.stateChanged(from, to);
-        LOGGER.info("Transitioned from: [{}] to: [{}]", from.getId(), to.getId());
+        if (from == null) {
+            LOGGER.info("Transitioned to: [{}]", to.getId());
+        } else {
+            LOGGER.info("Transitioned from: [{}] to: [{}]", from.getId(), to.getId());
+        }
     }
 }

@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.statemachine.config.EnableStateMachineFactory;
 import org.springframework.statemachine.config.EnumStateMachineConfigurerAdapter;
 import org.springframework.statemachine.config.StateMachineFactory;
 import org.springframework.statemachine.config.builders.StateMachineConfigurationConfigurer;
@@ -18,10 +20,12 @@ import org.springframework.statemachine.service.StateMachineService;
 
 import static com.ionos.domains.contact.create.CreateChoiceGuard.createPersistenceChoice;
 import static com.ionos.domains.contact.create.CreateChoiceGuard.createRegistryChoice;
+import static com.ionos.domains.contact.model.CreateContactEvent.CONTACT_PERSISTENCE_INITIATED;
+import static com.ionos.domains.contact.model.CreateContactEvent.STOP;
 import static com.ionos.domains.contact.model.CreateContactState.*;
 
-//@Configuration
-//@EnableStateMachineFactory
+@Configuration
+@EnableStateMachineFactory
 public class CreateContactUsingChoiceStateMachineConfiguration
 		extends
 			EnumStateMachineConfigurerAdapter<CreateContactState, CreateContactEvent> {
@@ -30,9 +34,6 @@ public class CreateContactUsingChoiceStateMachineConfiguration
 
 	@Autowired
 	private StateMachineRuntimePersister<CreateContactState, CreateContactEvent, String> stateMachineRuntimePersister;
-
-	@Autowired
-	private CreateAction createAction;
 
 	@Autowired
 	private CreateRegistryAction createRegistryAction;
@@ -62,12 +63,12 @@ public class CreateContactUsingChoiceStateMachineConfiguration
 		// @formatter:off
 		states
 				.withStates()
-				.initial(START)
+				.initial(CreateContactState.START)
 				.state(CONTACT_REGISTRY_INITIATED)
-				.state(CONTACT_REGISTRY_CHOICE)
+				.choice(CONTACT_REGISTRY_CHOICE)
 
-				.state(CONTACT_PERSISTENCE_INITIATED)
-				.state(CONTACT_PERSISTENCE_CHOICE)
+				.state(CreateContactState.CONTACT_PERSISTENCE_INITIATED)
+				.choice(CONTACT_PERSISTENCE_CHOICE)
 
 				.end(END);
 		// @formatter:on
@@ -79,33 +80,35 @@ public class CreateContactUsingChoiceStateMachineConfiguration
 		// @formatter:off
 		transitions
 				.withExternal()
-					.source(START).target(CONTACT_REGISTRY_INITIATED)
+					.source(CreateContactState.START).target(CONTACT_REGISTRY_INITIATED)
 					.event(CreateContactEvent.START)
-					.action(createRegistryAction::sendContactRegistryInitiated)
 					.and()
 
 				.withExternal()
 					.source(CONTACT_REGISTRY_INITIATED).target(CONTACT_REGISTRY_CHOICE)
 					.event(CreateContactEvent.CONTACT_REGISTRY_INITIATED)
-					.action(createRegistryAction::contactRegistrySuccess)
+					.action(createRegistryAction::contactRegistryError)
 					.and()
 
 				.withChoice()
 					.source(CONTACT_REGISTRY_CHOICE)
-					.first(CONTACT_REGISTRY_SUCCESS, createRegistryChoice())
-					.last(CONTACT_REGISTRY_ERROR, createRegistryAction::end)
+					.first(CONTACT_REGISTRY_SUCCESS,context -> true,createRegistryAction::test)
+					.last(CONTACT_REGISTRY_ERROR,createRegistryAction::error)
 					.and()
 
 				.withExternal()
-					.source(CONTACT_REGISTRY_SUCCESS).target(CONTACT_PERSISTENCE_INITIATED)
-					.event(CreateContactEvent.CONTACT_PERSISTENCE_INITIATED)
-					.action(createPersistenceAction::contactPersistenceInitiated)
+					.source(CONTACT_REGISTRY_ERROR).target(END)
+					.event(STOP)
 					.and()
 
 				.withExternal()
-					.source(CONTACT_PERSISTENCE_INITIATED).target(CONTACT_PERSISTENCE_CHOICE)
-					.event(CreateContactEvent.CONTACT_PERSISTENCE_INITIATED)
-					.action(createPersistenceAction::contactPersistenceSuccess)
+					.source(CONTACT_REGISTRY_SUCCESS).target(CreateContactState.CONTACT_PERSISTENCE_INITIATED)
+					.event(CONTACT_PERSISTENCE_INITIATED)
+					.and()
+
+				.withExternal()
+					.source(CreateContactState.CONTACT_PERSISTENCE_INITIATED).target(CONTACT_PERSISTENCE_CHOICE)
+					.event(CONTACT_PERSISTENCE_INITIATED)
 					.and()
 
 				.withChoice()
@@ -116,8 +119,7 @@ public class CreateContactUsingChoiceStateMachineConfiguration
 
 				.withExternal()
 					.source(CONTACT_PERSISTENCE_SUCCESS).target(END)
-					.event(CreateContactEvent.STOP)
-					.action(createAction::createContactEnd);
+					.event(STOP);
 		// @formatter:on
 	}
 
@@ -127,4 +129,5 @@ public class CreateContactUsingChoiceStateMachineConfiguration
 			StateMachineRuntimePersister<CreateContactState, CreateContactEvent, String> stateMachineRuntimePersister) {
 		return new DefaultStateMachineService<>(stateMachineFactory, stateMachineRuntimePersister);
 	}
+
 }

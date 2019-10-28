@@ -25,8 +25,8 @@ import com.ionos.domains.contact.model.CreateContactState;
 import com.ionos.domains.contact.model.Operation;
 import com.ionos.domains.contact.service.OperationService;
 
-@Configuration
-@EnableStateMachineFactory
+//@Configuration
+//@EnableStateMachineFactory
 public class CreateContactStateMachineConfiguration
 		extends
 			EnumStateMachineConfigurerAdapter<CreateContactState, CreateContactEvent> {
