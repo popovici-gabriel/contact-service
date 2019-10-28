@@ -74,7 +74,6 @@
             <version>0.9.3</version>
         </dependency>
 
-
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
@@ -112,6 +111,12 @@
         <dependency>
             <groupId>org.springframework.statemachine</groupId>
             <artifactId>spring-statemachine-autoconfigure</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.10</version>
         </dependency>
 
         <dependency>

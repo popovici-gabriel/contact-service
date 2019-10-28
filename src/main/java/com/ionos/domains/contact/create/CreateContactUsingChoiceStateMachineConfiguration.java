@@ -1,6 +1,5 @@
 package com.ionos.domains.contact.create;
 
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import com.ionos.domains.contact.configuration.CreateContactAdapter;
 import com.ionos.domains.contact.model.CreateContactEvent;
 import com.ionos.domains.contact.model.CreateContactState;
@@ -8,8 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.statemachine.config.EnableStateMachineFactory;
 import org.springframework.statemachine.config.EnumStateMachineConfigurerAdapter;
 import org.springframework.statemachine.config.StateMachineFactory;
 import org.springframework.statemachine.config.builders.StateMachineConfigurationConfigurer;
@@ -84,8 +81,6 @@ public class CreateContactUsingChoiceStateMachineConfiguration
 				.withExternal()
 					.source(START).target(CONTACT_REGISTRY_INITIATED)
 					.event(CreateContactEvent.START)
-					.action(createRegistryAction::contactRegistryInitiated)
-					.action(createRegistryAction::postContact)
 					.action(createRegistryAction::sendContactRegistryInitiated)
 					.and()
 
@@ -98,7 +93,7 @@ public class CreateContactUsingChoiceStateMachineConfiguration
 				.withChoice()
 					.source(CONTACT_REGISTRY_CHOICE)
 					.first(CONTACT_REGISTRY_SUCCESS, createRegistryChoice())
-					.last(CONTACT_REGISTRY_ERROR)
+					.last(CONTACT_REGISTRY_ERROR, createRegistryAction::end)
 					.and()
 
 				.withExternal()

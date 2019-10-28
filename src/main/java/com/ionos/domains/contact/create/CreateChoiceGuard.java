@@ -2,9 +2,9 @@ package com.ionos.domains.contact.create;
 
 import com.ionos.domains.contact.model.CreateContactEvent;
 import com.ionos.domains.contact.model.CreateContactState;
-import org.springframework.statemachine.guard.Guard;
-
+import com.ionos.domains.contact.model.NotFoundError;
 import java.util.Optional;
+import org.springframework.statemachine.guard.Guard;
 
 
 public class CreateChoiceGuard {
@@ -17,7 +17,7 @@ public class CreateChoiceGuard {
                         .get("success"))
                 .filter(Boolean.class::isInstance)
                 .map(Boolean.class::cast)
-                .orElseThrow(IllegalAccessError::new);
+                .orElseThrow(() -> new NotFoundError("success not found in context variables"));
     }
 
 
@@ -29,7 +29,7 @@ public class CreateChoiceGuard {
                         .get("success"))
                 .filter(Boolean.class::isInstance)
                 .map(Boolean.class::cast)
-                .orElseThrow(IllegalAccessError::new);
+                .orElseThrow(() -> new NotFoundError("success not found in context variables"));
     }
 
 }
