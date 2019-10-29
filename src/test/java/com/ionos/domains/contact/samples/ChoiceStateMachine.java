@@ -33,31 +33,17 @@ public class ChoiceStateMachine extends EnumStateMachineConfigurerAdapter<Create
             throws Exception {
         transitions
                 .withExternal()
-                .source(CreateContactState.START).target(CreateContactState.CONTACT_REGISTRY_INITIATED)
-                .event(CreateContactEvent.START)
-                .action(stateContext -> {
-                    System.out.println("Done");
-                    stateContext
-                            .getExtendedState()
-                            .getVariables()
-                            .putIfAbsent("success", Boolean.TRUE);
-                })
-                .and()
+                    .source(CreateContactState.START).target(CreateContactState.CONTACT_REGISTRY_INITIATED)
+                    .event(CreateContactEvent.START)
+                    .and()
                 .withExternal()
-                .source(CreateContactState.CONTACT_REGISTRY_INITIATED).target(CreateContactState.CONTACT_REGISTRY_CHOICE)
-                .event(CreateContactEvent.START)
-                .and()
+                    .source(CreateContactState.CONTACT_REGISTRY_INITIATED).target(CreateContactState.CONTACT_REGISTRY_CHOICE)
+                    .event(CreateContactEvent.START)
+                    .and()
                 .withChoice()
-                .source(CreateContactState.CONTACT_REGISTRY_CHOICE)
-                .first(CreateContactState.CONTACT_REGISTRY_SUCCESS, stateContext -> Optional
-                        .of(stateContext
-                                .getExtendedState()
-                                .getVariables()
-                                .get("success"))
-                        .filter(Boolean.class::isInstance)
-                        .map(Boolean.class::cast)
-                        .orElseThrow(IllegalAccessError::new))
-                .last(CreateContactState.CONTACT_REGISTRY_ERROR);
+                    .source(CreateContactState.CONTACT_REGISTRY_CHOICE)
+                    .first(CreateContactState.CONTACT_REGISTRY_SUCCESS, context -> false)
+                    .last(CreateContactState.CONTACT_REGISTRY_ERROR);
 
     }
 

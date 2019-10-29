@@ -34,6 +34,6 @@ public class ChoiceTest {
         Assertions.assertTrue(success);
         stateMachine.sendEvent(CreateContactEvent.START);
         Assertions.assertTrue(success);
-        Assertions.assertSame(stateMachine.getState().getId(), CreateContactState.CONTACT_REGISTRY_SUCCESS);
+        Assertions.assertSame(stateMachine.getState().getId(), CreateContactState.CONTACT_REGISTRY_ERROR);
     }
 }
