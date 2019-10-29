@@ -24,4 +24,13 @@ $ git clone ssh://git@bitbucket.1and1.org/dr/contact-service.git
 $ cd contact-service
 $ mvn clean install
 $ java -jar target/*.jar or mvn spring-boot:run
+
+$ curl -X POST http://localhost:8080/contacts 
+$ curl -X PUT http://localhost:8080/contacts
+$ curl -X DELETE http://localhost:8080/contacts
 ```
+Application will be exposed on port 8080 and logs will be available on /logs folder 
+File: transitions.log output machine id and state transition information 
+File: contact-service.log is application log file 
+
+
