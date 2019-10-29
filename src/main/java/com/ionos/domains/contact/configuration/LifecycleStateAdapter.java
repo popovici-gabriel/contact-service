@@ -13,6 +13,7 @@ public class LifecycleStateAdapter extends StateMachineListenerAdapter {
     public void stateChanged(State from, State to) {
         super.stateChanged(from, to);
         if (from == null) {
+            LOGGER.info("---------------------");
             LOGGER.info("Transitioned to: [{}]", to.getId());
         } else {
             LOGGER.info("Transitioned from: [{}] to: [{}]", from.getId(), to.getId());
