@@ -2,14 +2,13 @@ package com.ionos.domains.contact.samples;
 
 import com.ionos.domains.contact.model.CreateContactEvent;
 import com.ionos.domains.contact.model.CreateContactState;
+import java.util.EnumSet;
+import java.util.Optional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.statemachine.config.EnableStateMachine;
 import org.springframework.statemachine.config.EnumStateMachineConfigurerAdapter;
 import org.springframework.statemachine.config.builders.StateMachineStateConfigurer;
 import org.springframework.statemachine.config.builders.StateMachineTransitionConfigurer;
-
-import java.util.EnumSet;
-import java.util.Optional;
 
 @Configuration
 @EnableStateMachine
@@ -34,31 +33,31 @@ public class ChoiceStateMachine extends EnumStateMachineConfigurerAdapter<Create
             throws Exception {
         transitions
                 .withExternal()
-                    .source(CreateContactState.START).target(CreateContactState.CONTACT_REGISTRY_INITIATED)
-                    .event(CreateContactEvent.START)
-                    .action(stateContext -> {
-                        System.out.println("Done");
-                        stateContext
+                .source(CreateContactState.START).target(CreateContactState.CONTACT_REGISTRY_INITIATED)
+                .event(CreateContactEvent.START)
+                .action(stateContext -> {
+                    System.out.println("Done");
+                    stateContext
+                            .getExtendedState()
+                            .getVariables()
+                            .putIfAbsent("success", Boolean.TRUE);
+                })
+                .and()
+                .withExternal()
+                .source(CreateContactState.CONTACT_REGISTRY_INITIATED).target(CreateContactState.CONTACT_REGISTRY_CHOICE)
+                .event(CreateContactEvent.START)
+                .and()
+                .withChoice()
+                .source(CreateContactState.CONTACT_REGISTRY_CHOICE)
+                .first(CreateContactState.CONTACT_REGISTRY_SUCCESS, stateContext -> Optional
+                        .of(stateContext
                                 .getExtendedState()
                                 .getVariables()
-                                .putIfAbsent("success",Boolean.TRUE);
-                    })
-                    .and()
-                .withExternal()
-                    .source(CreateContactState.CONTACT_REGISTRY_INITIATED).target(CreateContactState.CONTACT_REGISTRY_CHOICE)
-                    .event(CreateContactEvent.START)
-                    .and()
-                .withChoice()
-                    .source(CreateContactState.CONTACT_REGISTRY_CHOICE)
-                    .first(CreateContactState.CONTACT_REGISTRY_SUCCESS,stateContext -> Optional
-                            .of(stateContext
-                                    .getExtendedState()
-                                    .getVariables()
-                                    .get("success"))
-                            .filter(Boolean.class::isInstance)
-                            .map(Boolean.class::cast)
-                            .orElseThrow(IllegalAccessError::new))
-                    .last(CreateContactState.CONTACT_REGISTRY_ERROR);
+                                .get("success"))
+                        .filter(Boolean.class::isInstance)
+                        .map(Boolean.class::cast)
+                        .orElseThrow(IllegalAccessError::new))
+                .last(CreateContactState.CONTACT_REGISTRY_ERROR);
 
     }
 
