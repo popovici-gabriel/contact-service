@@ -47,6 +47,18 @@
         <appender-ref ref="transitions"/>
     </logger>
 
+    <logger name="com.ionos.domains.contact.create.CreateContactService" level="INFO" additivity="false">
+        <appender-ref ref="transitions"/>
+    </logger>
+
+    <logger name="com.ionos.domains.contact.delete.DeleteContactService" level="INFO" additivity="false">
+        <appender-ref ref="transitions"/>
+    </logger>
+
+    <logger name="com.ionos.domains.contact.update.UpdateContactService" level="INFO" additivity="false">
+        <appender-ref ref="transitions"/>
+    </logger>
+
     <root>
         <appender-ref ref="STDOUT" />
         <appender-ref ref="accessLog" />

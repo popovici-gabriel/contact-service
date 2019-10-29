@@ -21,7 +21,8 @@ public class UpdateContactService {
     }
 
     public String update(String instanceId) {
-        LOGGER.info("Starting create contact operation with id [{}]", instanceId);
+        LOGGER.info("------------------------------------");
+        LOGGER.info("Starting MACHINE_ID = {}", instanceId);
         // @formatter:off
         final var stateMachine = updateService.acquireStateMachine(instanceId, true);
 
