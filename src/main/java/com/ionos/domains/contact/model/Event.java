@@ -1,4 +1,4 @@
-package com.ionos.domains.contact.event;
+package com.ionos.domains.contact.model;
 
 import java.util.Date;
 import java.util.StringJoiner;
