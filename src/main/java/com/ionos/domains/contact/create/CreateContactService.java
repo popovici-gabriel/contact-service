@@ -20,7 +20,7 @@ public class CreateContactService {
         this.createService = requireNonNull(createService);
     }
 
-    public String createContact(String instanceId) {
+    public String create(String instanceId) {
         LOGGER.info("Starting create contact operation with id [{}]", instanceId);
         // @formatter:off
         final var stateMachine = createService.acquireStateMachine(instanceId, true);

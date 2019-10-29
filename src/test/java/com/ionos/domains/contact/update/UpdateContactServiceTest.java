@@ -17,7 +17,7 @@ class UpdateContactServiceTest {
         // given
         final var instanceId = UUID.randomUUID().toString();
         // when
-        updateService.updateContact(instanceId);
+        updateService.update(instanceId);
         // then
         Assertions.assertThat(updateService.getCurrentState(instanceId)).isSameAs(UpdateContactState.END);
     }

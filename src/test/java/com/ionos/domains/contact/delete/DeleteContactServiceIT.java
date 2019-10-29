@@ -1,4 +1,4 @@
-package com.ionos.domains.contact.create;
+package com.ionos.domains.contact.delete;
 
 import java.util.UUID;
 import org.assertj.core.api.Assertions;
@@ -7,18 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class CreateContactServiceIT {
+class DeleteContactServiceIT {
 
     @Autowired
-    private CreateContactService contactService;
+    private DeleteContactService deleteContactService;
 
     @Test
     void test() {
         // given
         final var instanceId = UUID.randomUUID().toString();
         // when
-        contactService.create(instanceId);
+        deleteContactService.delete(instanceId);
         // then
-        Assertions.assertThat(contactService.getCurrentState(instanceId)).isSameAs(CreateContactState.END);
+        Assertions.assertThat(deleteContactService.getCurrentState(instanceId)).isSameAs(DeleteContactState.END);
     }
+
 }

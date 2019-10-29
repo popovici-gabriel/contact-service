@@ -1,0 +1,16 @@
+package com.ionos.domains.contact.delete;
+
+// @formatter:off
+public enum DeleteContactEvent {
+	START,
+	STOP,
+
+	CONTACT_REGISTRY_INITIATED,
+	CONTACT_REGISTRY_SUCCESS,
+	CONTACT_REGISTRY_ERROR,
+
+	CONTACT_PERSISTENCE_INITIATED,
+	CONTACT_PERSISTENCE_SUCCESS,
+	CONTACT_PERSISTENCE_ERROR
+}
+// @formatter:on
