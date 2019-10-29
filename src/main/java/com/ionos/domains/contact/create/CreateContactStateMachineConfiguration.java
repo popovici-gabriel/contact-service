@@ -17,13 +17,13 @@ import org.springframework.statemachine.service.StateMachineService;
 import static com.ionos.domains.contact.create.CreateChoiceGuard.createPersistenceChoice;
 import static com.ionos.domains.contact.create.CreateChoiceGuard.createRegistryChoice;
 import static com.ionos.domains.contact.create.CreateContactEvent.STOP;
-import static com.ionos.domains.contact.create.CreateContactState.CONTACT_PERSISTENCE_CHOICE;
-import static com.ionos.domains.contact.create.CreateContactState.CONTACT_PERSISTENCE_ERROR;
-import static com.ionos.domains.contact.create.CreateContactState.CONTACT_PERSISTENCE_SUCCESS;
-import static com.ionos.domains.contact.create.CreateContactState.CONTACT_REGISTRY_CHOICE;
-import static com.ionos.domains.contact.create.CreateContactState.CONTACT_REGISTRY_ERROR;
-import static com.ionos.domains.contact.create.CreateContactState.CONTACT_REGISTRY_INITIATED;
-import static com.ionos.domains.contact.create.CreateContactState.CONTACT_REGISTRY_SUCCESS;
+import static com.ionos.domains.contact.create.CreateContactState.CREATE_PERSISTENCE_CHOICE;
+import static com.ionos.domains.contact.create.CreateContactState.CREATE_PERSISTENCE_ERROR;
+import static com.ionos.domains.contact.create.CreateContactState.CREATE_PERSISTENCE_SUCCESS;
+import static com.ionos.domains.contact.create.CreateContactState.CREATE_REGISTRY_CHOICE;
+import static com.ionos.domains.contact.create.CreateContactState.CREATE_REGISTRY_ERROR;
+import static com.ionos.domains.contact.create.CreateContactState.CREATE_REGISTRY_INITIATED;
+import static com.ionos.domains.contact.create.CreateContactState.CREATE_REGISTRY_SUCCESS;
 import static com.ionos.domains.contact.create.CreateContactState.END;
 
 @Configuration
@@ -61,10 +61,10 @@ public class CreateContactStateMachineConfiguration
 		states
 				.withStates()
 				.initial(CreateContactState.START)
-				.state(CONTACT_REGISTRY_INITIATED)
-				.choice(CONTACT_REGISTRY_CHOICE)
-				.state(CreateContactState.CONTACT_PERSISTENCE_INITIATED)
-				.choice(CONTACT_PERSISTENCE_CHOICE)
+				.state(CREATE_REGISTRY_INITIATED)
+				.choice(CREATE_REGISTRY_CHOICE)
+				.state(CreateContactState.CREATE_PERSISTENCE_INITIATED)
+				.choice(CREATE_PERSISTENCE_CHOICE)
 				.end(END)
 				.states(EnumSet.allOf(CreateContactState.class));
 		// @formatter:on
@@ -76,50 +76,50 @@ public class CreateContactStateMachineConfiguration
 		// @formatter:off
 		transitions
 				.withExternal()
-					.source(CreateContactState.START).target(CONTACT_REGISTRY_INITIATED)
+					.source(CreateContactState.START).target(CREATE_REGISTRY_INITIATED)
 					.event(CreateContactEvent.START)
 					.and()
 
 				.withExternal()
-					.source(CONTACT_REGISTRY_INITIATED).target(CONTACT_REGISTRY_CHOICE)
+					.source(CREATE_REGISTRY_INITIATED).target(CREATE_REGISTRY_CHOICE)
 					.event(CreateContactEvent.CONTACT_REGISTRY_INITIATED)
 					.action(createContactAction::create)
 					.and()
 
 				.withChoice()
-					.source(CONTACT_REGISTRY_CHOICE)
-					.first(CONTACT_REGISTRY_SUCCESS, createRegistryChoice())
-					.last(CONTACT_REGISTRY_ERROR)
+					.source(CREATE_REGISTRY_CHOICE)
+					.first(CREATE_REGISTRY_SUCCESS, createRegistryChoice())
+					.last(CREATE_REGISTRY_ERROR)
 					.and()
 
 				.withExternal()
-					.source(CONTACT_REGISTRY_ERROR).target(END)
+					.source(CREATE_REGISTRY_ERROR).target(END)
 					.event(STOP)
 					.and()
 
 				.withExternal()
-					.source(CONTACT_REGISTRY_SUCCESS).target(CreateContactState.CONTACT_PERSISTENCE_INITIATED)
+					.source(CREATE_REGISTRY_SUCCESS).target(CreateContactState.CREATE_PERSISTENCE_INITIATED)
 					.event(CreateContactEvent.CONTACT_PERSISTENCE_INITIATED)
 					.action(createContactAction::create)
 					.and()
 
 				.withJoin()
-					.source(CreateContactState.CONTACT_PERSISTENCE_INITIATED).target(CONTACT_PERSISTENCE_CHOICE)
+					.source(CreateContactState.CREATE_PERSISTENCE_INITIATED).target(CREATE_PERSISTENCE_CHOICE)
 					.and()
 
 				.withChoice()
-					.source(CONTACT_PERSISTENCE_CHOICE)
-					.first(CONTACT_PERSISTENCE_SUCCESS, createPersistenceChoice())
-					.last(CONTACT_PERSISTENCE_ERROR)
+					.source(CREATE_PERSISTENCE_CHOICE)
+					.first(CREATE_PERSISTENCE_SUCCESS, createPersistenceChoice())
+					.last(CREATE_PERSISTENCE_ERROR)
 					.and()
 
 				.withExternal()
-					.source(CONTACT_PERSISTENCE_ERROR).target(END)
+					.source(CREATE_PERSISTENCE_ERROR).target(END)
 					.event(STOP)
 					.and()
 
 				.withExternal()
-					.source(CONTACT_PERSISTENCE_SUCCESS).target(END)
+					.source(CREATE_PERSISTENCE_SUCCESS).target(END)
 					.event(STOP);
 		// @formatter:on
 	}

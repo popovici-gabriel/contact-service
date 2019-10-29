@@ -19,9 +19,9 @@ public class ChoiceStateMachine extends EnumStateMachineConfigurerAdapter<Create
         states
                 .withStates()
                 .initial(CreateContactState.START) // start
-                .state(CreateContactState.CONTACT_REGISTRY_INITIATED) //initiated
-                .choice(CreateContactState.CONTACT_REGISTRY_CHOICE) // choice
-                .state(CreateContactState.CONTACT_REGISTRY_ERROR)   // end
+                .state(CreateContactState.CREATE_REGISTRY_INITIATED) //initiated
+                .choice(CreateContactState.CREATE_REGISTRY_CHOICE) // choice
+                .state(CreateContactState.CREATE_REGISTRY_ERROR)   // end
                 .end(CreateContactState.END) //end
                 .states(EnumSet.allOf(CreateContactState.class));
     }
@@ -32,17 +32,17 @@ public class ChoiceStateMachine extends EnumStateMachineConfigurerAdapter<Create
             throws Exception {
         transitions
                 .withExternal()
-                    .source(CreateContactState.START).target(CreateContactState.CONTACT_REGISTRY_INITIATED)
+                    .source(CreateContactState.START).target(CreateContactState.CREATE_REGISTRY_INITIATED)
                     .event(CreateContactEvent.START)
                     .and()
                 .withExternal()
-                    .source(CreateContactState.CONTACT_REGISTRY_INITIATED).target(CreateContactState.CONTACT_REGISTRY_CHOICE)
+                    .source(CreateContactState.CREATE_REGISTRY_INITIATED).target(CreateContactState.CREATE_REGISTRY_CHOICE)
                     .event(CreateContactEvent.START)
                     .and()
                 .withChoice()
-                    .source(CreateContactState.CONTACT_REGISTRY_CHOICE)
-                    .first(CreateContactState.CONTACT_REGISTRY_SUCCESS, context -> false)
-                    .last(CreateContactState.CONTACT_REGISTRY_ERROR);
+                    .source(CreateContactState.CREATE_REGISTRY_CHOICE)
+                    .first(CreateContactState.CREATE_REGISTRY_SUCCESS, context -> false)
+                    .last(CreateContactState.CREATE_REGISTRY_ERROR);
 
     }
 

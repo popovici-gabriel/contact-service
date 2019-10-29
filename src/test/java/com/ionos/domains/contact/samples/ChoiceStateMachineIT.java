@@ -34,6 +34,6 @@ public class ChoiceStateMachineIT {
         Assertions.assertTrue(success);
         stateMachine.sendEvent(CreateContactEvent.START);
         Assertions.assertTrue(success);
-        Assertions.assertSame(stateMachine.getState().getId(), CreateContactState.CONTACT_REGISTRY_ERROR);
+        Assertions.assertSame(stateMachine.getState().getId(), CreateContactState.CREATE_REGISTRY_ERROR);
     }
 }

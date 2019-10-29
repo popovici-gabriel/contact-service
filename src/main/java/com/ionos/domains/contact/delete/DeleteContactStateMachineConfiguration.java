@@ -16,14 +16,14 @@ import org.springframework.statemachine.service.DefaultStateMachineService;
 import org.springframework.statemachine.service.StateMachineService;
 import static com.ionos.domains.contact.delete.DeleteChoiceGuard.deletePersistenceChoice;
 import static com.ionos.domains.contact.delete.DeleteChoiceGuard.deleteRegistryChoice;
-import static com.ionos.domains.contact.delete.DeleteContactState.CONTACT_PERSISTENCE_CHOICE;
-import static com.ionos.domains.contact.delete.DeleteContactState.CONTACT_PERSISTENCE_ERROR;
-import static com.ionos.domains.contact.delete.DeleteContactState.CONTACT_PERSISTENCE_INITIATED;
-import static com.ionos.domains.contact.delete.DeleteContactState.CONTACT_PERSISTENCE_SUCCESS;
-import static com.ionos.domains.contact.delete.DeleteContactState.CONTACT_REGISTRY_CHOICE;
-import static com.ionos.domains.contact.delete.DeleteContactState.CONTACT_REGISTRY_ERROR;
-import static com.ionos.domains.contact.delete.DeleteContactState.CONTACT_REGISTRY_INITIATED;
-import static com.ionos.domains.contact.delete.DeleteContactState.CONTACT_REGISTRY_SUCCESS;
+import static com.ionos.domains.contact.delete.DeleteContactState.DELETE_PERSISTENCE_CHOICE;
+import static com.ionos.domains.contact.delete.DeleteContactState.DELETE_PERSISTENCE_ERROR;
+import static com.ionos.domains.contact.delete.DeleteContactState.DELETE_PERSISTENCE_INITIATED;
+import static com.ionos.domains.contact.delete.DeleteContactState.DELETE_PERSISTENCE_SUCCESS;
+import static com.ionos.domains.contact.delete.DeleteContactState.DELETE_REGISTRY_CHOICE;
+import static com.ionos.domains.contact.delete.DeleteContactState.DELETE_REGISTRY_ERROR;
+import static com.ionos.domains.contact.delete.DeleteContactState.DELETE_REGISTRY_INITIATED;
+import static com.ionos.domains.contact.delete.DeleteContactState.DELETE_REGISTRY_SUCCESS;
 import static com.ionos.domains.contact.delete.DeleteContactState.END;
 import static com.ionos.domains.contact.delete.DeleteContactState.START;
 
@@ -62,10 +62,10 @@ public class DeleteContactStateMachineConfiguration
 		states
 				.withStates()
 				.initial(START)
-				.state(CONTACT_REGISTRY_INITIATED)
-				.choice(CONTACT_REGISTRY_CHOICE)
-				.state(CONTACT_PERSISTENCE_INITIATED)
-				.choice(CONTACT_PERSISTENCE_CHOICE)
+				.state(DELETE_REGISTRY_INITIATED)
+				.choice(DELETE_REGISTRY_CHOICE)
+				.state(DELETE_PERSISTENCE_INITIATED)
+				.choice(DELETE_PERSISTENCE_CHOICE)
 				.end(END)
 				.states(EnumSet.allOf(DeleteContactState.class));
 		// @formatter:on
@@ -77,50 +77,50 @@ public class DeleteContactStateMachineConfiguration
 		// @formatter:off
 		transitions
 				.withExternal()
-					.source(START).target(CONTACT_REGISTRY_INITIATED)
+					.source(START).target(DELETE_REGISTRY_INITIATED)
 					.event(DeleteContactEvent.START)
 					.and()
 
 				.withExternal()
-					.source(CONTACT_REGISTRY_INITIATED).target(CONTACT_REGISTRY_CHOICE)
+					.source(DELETE_REGISTRY_INITIATED).target(DELETE_REGISTRY_CHOICE)
 					.event(DeleteContactEvent.CONTACT_REGISTRY_INITIATED)
 					.action(deleteContactAction::delete)
 					.and()
 
 				.withChoice()
-					.source(CONTACT_REGISTRY_CHOICE)
-					.first(CONTACT_REGISTRY_SUCCESS, deleteRegistryChoice())
-					.last(CONTACT_REGISTRY_ERROR)
+					.source(DELETE_REGISTRY_CHOICE)
+					.first(DELETE_REGISTRY_SUCCESS, deleteRegistryChoice())
+					.last(DELETE_REGISTRY_ERROR)
 					.and()
 
 				.withExternal()
-					.source(CONTACT_REGISTRY_ERROR).target(END)
+					.source(DELETE_REGISTRY_ERROR).target(END)
 					.event(DeleteContactEvent.STOP)
 					.and()
 
 				.withExternal()
-					.source(CONTACT_REGISTRY_SUCCESS).target(CONTACT_PERSISTENCE_INITIATED)
+					.source(DELETE_REGISTRY_SUCCESS).target(DELETE_PERSISTENCE_INITIATED)
 					.event(DeleteContactEvent.CONTACT_PERSISTENCE_INITIATED)
 					.action(deleteContactAction::delete)
 					.and()
 
 				.withJoin()
-					.source(CONTACT_PERSISTENCE_INITIATED).target(CONTACT_PERSISTENCE_CHOICE)
+					.source(DELETE_PERSISTENCE_INITIATED).target(DELETE_PERSISTENCE_CHOICE)
 					.and()
 
 				.withChoice()
-					.source(CONTACT_PERSISTENCE_CHOICE)
-					.first(CONTACT_PERSISTENCE_SUCCESS, deletePersistenceChoice())
-					.last(CONTACT_PERSISTENCE_ERROR)
+					.source(DELETE_PERSISTENCE_CHOICE)
+					.first(DELETE_PERSISTENCE_SUCCESS, deletePersistenceChoice())
+					.last(DELETE_PERSISTENCE_ERROR)
 					.and()
 
 				.withExternal()
-					.source(CONTACT_PERSISTENCE_ERROR).target(END)
+					.source(DELETE_PERSISTENCE_ERROR).target(END)
 					.event(DeleteContactEvent.STOP)
 					.and()
 
 				.withExternal()
-					.source(CONTACT_PERSISTENCE_SUCCESS).target(END)
+					.source(DELETE_PERSISTENCE_SUCCESS).target(END)
 					.event(DeleteContactEvent.STOP);
 		// @formatter:on
 	}

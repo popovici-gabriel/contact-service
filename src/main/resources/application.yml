@@ -49,7 +49,18 @@ spring:
           json:
             trusted:
               packages: com.ionos.domains.contact.event
-
+  statemachine:
+    monitor:
+      enabled: true
+    data:
+      jpa:
+        repositories:
+          enabled: true
+  data:
+    jpa:
+      repositories:
+        enabled: true
+        bootstrap-mode: DEFAULT
 
 security:
   basic:

@@ -18,6 +18,13 @@
         </encoder>
     </appender>
 
+    <appender name="transitions" class="ch.qos.logback.core.FileAppender">
+        <file>logs/transitions.log</file>
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
     <appender name="async" class="ch.qos.logback.classic.AsyncAppender">
         <appender-ref ref="accessLog" />
     </appender>
@@ -34,6 +41,10 @@
     <logger name="com.zaxxer.hikari" level="info" additivity="false">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="accessLog" />
+    </logger>
+
+    <logger name="com.ionos.domains.contact.configuration.LifecycleStateAdapter" level="INFO" additivity="false">
+        <appender-ref ref="transitions"/>
     </logger>
 
     <root>
