@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.statemachine.service.StateMachineService;
 import org.springframework.stereotype.Service;
 import static java.util.Objects.requireNonNull;
-import static org.springframework.messaging.support.MessageBuilder.withPayload;
 
 @Service
 public class CreateContactService {
@@ -25,12 +24,11 @@ public class CreateContactService {
     public String startCreateContact(String instanceId) {
         // @formatter:off
         final var stateMachine = stateMachineService.acquireStateMachine(instanceId, true);
-
-        stateMachine.sendEvent(withPayload(CreateContactEvent.START).build());
-        stateMachine.sendEvent(withPayload(CreateContactEvent.CONTACT_REGISTRY_INITIATED).build());
-        stateMachine.sendEvent(withPayload(CreateContactEvent.CONTACT_PERSISTENCE_INITIATED).build());
-        stateMachine.sendEvent(withPayload(CreateContactEvent.STOP).build());
-
+        stateMachine.sendEvent(CreateContactEvent.START);
+        stateMachine.sendEvent(CreateContactEvent.CONTACT_REGISTRY_INITIATED);
+        stateMachine.sendEvent(CreateContactEvent.CONTACT_PERSISTENCE_INITIATED);
+        stateMachine.sendEvent(CreateContactEvent.STOP);
+        stateMachineService.releaseStateMachine(instanceId);
         return instanceId;
         // @formatter:on
     }

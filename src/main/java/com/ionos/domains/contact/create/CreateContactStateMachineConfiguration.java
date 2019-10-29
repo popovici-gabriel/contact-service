@@ -19,6 +19,7 @@ import org.springframework.statemachine.persist.StateMachineRuntimePersister;
 import org.springframework.statemachine.service.DefaultStateMachineService;
 import org.springframework.statemachine.service.StateMachineService;
 import static com.ionos.domains.contact.create.CreateChoiceGuard.createPersistenceChoice;
+import static com.ionos.domains.contact.create.CreateChoiceGuard.createRegistryChoice;
 import static com.ionos.domains.contact.model.CreateContactEvent.STOP;
 import static com.ionos.domains.contact.model.CreateContactState.CONTACT_PERSISTENCE_CHOICE;
 import static com.ionos.domains.contact.model.CreateContactState.CONTACT_PERSISTENCE_ERROR;
@@ -58,7 +59,7 @@ public class CreateContactStateMachineConfiguration
 		config
 				.withConfiguration()
 				.machineId("create-contact-with-choices")
-				.autoStartup(true)
+				.autoStartup(false)
 				.listener(new CreateContactAdapter());
 		// @formatter:on
 	}
@@ -71,10 +72,8 @@ public class CreateContactStateMachineConfiguration
 				.initial(CreateContactState.START)
 				.state(CONTACT_REGISTRY_INITIATED)
 				.choice(CONTACT_REGISTRY_CHOICE)
-
 				.state(CreateContactState.CONTACT_PERSISTENCE_INITIATED)
 				.choice(CONTACT_PERSISTENCE_CHOICE)
-
 				.end(END)
 				.states(EnumSet.allOf(CreateContactState.class));
 		// @formatter:on
@@ -93,11 +92,12 @@ public class CreateContactStateMachineConfiguration
 				.withExternal()
 					.source(CONTACT_REGISTRY_INITIATED).target(CONTACT_REGISTRY_CHOICE)
 					.event(CreateContactEvent.CONTACT_REGISTRY_INITIATED)
+					.action(createRegistryAction::contactRegistrySuccess)
 					.and()
 
 				.withChoice()
 					.source(CONTACT_REGISTRY_CHOICE)
-					.first(CONTACT_REGISTRY_SUCCESS,context -> true)
+					.first(CONTACT_REGISTRY_SUCCESS, createRegistryChoice())
 					.last(CONTACT_REGISTRY_ERROR)
 					.and()
 
@@ -109,6 +109,7 @@ public class CreateContactStateMachineConfiguration
 				.withExternal()
 					.source(CONTACT_REGISTRY_SUCCESS).target(CreateContactState.CONTACT_PERSISTENCE_INITIATED)
 					.event(CreateContactEvent.CONTACT_PERSISTENCE_INITIATED)
+					.action(createPersistenceAction::persistenceSuccess)
 					.and()
 
 				.withJoin()
@@ -117,7 +118,7 @@ public class CreateContactStateMachineConfiguration
 
 				.withChoice()
 					.source(CONTACT_PERSISTENCE_CHOICE)
-					.first(CONTACT_PERSISTENCE_SUCCESS, context -> true)
+					.first(CONTACT_PERSISTENCE_SUCCESS, createPersistenceChoice())
 					.last(CONTACT_PERSISTENCE_ERROR)
 					.and()
 

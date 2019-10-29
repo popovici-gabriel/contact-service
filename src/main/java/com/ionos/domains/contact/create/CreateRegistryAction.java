@@ -13,7 +13,7 @@ public class CreateRegistryAction {
         context
                 .getExtendedState()
                 .getVariables()
-                .putIfAbsent("success", true);
+                .putIfAbsent("continue", true);
         // @formatter:on
     }
 
@@ -21,15 +21,6 @@ public class CreateRegistryAction {
         context
                 .getExtendedState()
                 .getVariables()
-                .putIfAbsent("success", false);
-    }
-
-    public void error(StateContext<CreateContactState, CreateContactEvent> context) {
-        System.out.println("test");
-    }
-
-    public void test(StateContext<CreateContactState, CreateContactEvent> context) {
-        System.out.println("test");
-
+                .putIfAbsent("continue", false);
     }
 }

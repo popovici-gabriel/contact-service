@@ -20,9 +20,11 @@ class CreateContactServiceIT {
 
     @Test
     void test() throws InterruptedException {
+        // given
         final var instanceId = UUID.randomUUID().toString();
+        // when
         contactService.startCreateContact(instanceId);
-        final var state = contactService.getCurrentState(instanceId);
-        Assertions.assertThat(state).isSameAs(CreateContactState.END);
+        // then
+        Assertions.assertThat(contactService.getCurrentState(instanceId)).isSameAs(CreateContactState.END);
     }
 }
