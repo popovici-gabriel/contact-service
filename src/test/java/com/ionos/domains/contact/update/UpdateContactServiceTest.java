@@ -1,6 +1,6 @@
-package com.ionos.domains.contact.create;
+package com.ionos.domains.contact.update;
 
-import com.ionos.domains.contact.model.CreateContactState;
+import com.ionos.domains.contact.model.UpdateContactState;
 import java.util.UUID;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -8,18 +8,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class CreateContactServiceIT {
+class UpdateContactServiceTest {
 
     @Autowired
-    private CreateContactService contactService;
+    private UpdateContactService updateService;
 
     @Test
     void test() {
         // given
         final var instanceId = UUID.randomUUID().toString();
         // when
-        contactService.createContact(instanceId);
+        updateService.updateContact(instanceId);
         // then
-        Assertions.assertThat(contactService.getCurrentState(instanceId)).isSameAs(CreateContactState.END);
+        Assertions.assertThat(updateService.getCurrentState(instanceId)).isSameAs(UpdateContactState.END);
     }
+
 }
