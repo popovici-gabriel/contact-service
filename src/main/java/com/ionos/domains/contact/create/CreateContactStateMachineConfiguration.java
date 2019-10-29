@@ -3,6 +3,7 @@ package com.ionos.domains.contact.create;
 import com.ionos.domains.contact.configuration.CreateContactAdapter;
 import com.ionos.domains.contact.model.CreateContactEvent;
 import com.ionos.domains.contact.model.CreateContactState;
+import java.util.EnumSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,20 +18,24 @@ import org.springframework.statemachine.config.builders.StateMachineTransitionCo
 import org.springframework.statemachine.persist.StateMachineRuntimePersister;
 import org.springframework.statemachine.service.DefaultStateMachineService;
 import org.springframework.statemachine.service.StateMachineService;
-
 import static com.ionos.domains.contact.create.CreateChoiceGuard.createPersistenceChoice;
-import static com.ionos.domains.contact.create.CreateChoiceGuard.createRegistryChoice;
-import static com.ionos.domains.contact.model.CreateContactEvent.CONTACT_PERSISTENCE_INITIATED;
 import static com.ionos.domains.contact.model.CreateContactEvent.STOP;
-import static com.ionos.domains.contact.model.CreateContactState.*;
+import static com.ionos.domains.contact.model.CreateContactState.CONTACT_PERSISTENCE_CHOICE;
+import static com.ionos.domains.contact.model.CreateContactState.CONTACT_PERSISTENCE_ERROR;
+import static com.ionos.domains.contact.model.CreateContactState.CONTACT_PERSISTENCE_SUCCESS;
+import static com.ionos.domains.contact.model.CreateContactState.CONTACT_REGISTRY_CHOICE;
+import static com.ionos.domains.contact.model.CreateContactState.CONTACT_REGISTRY_ERROR;
+import static com.ionos.domains.contact.model.CreateContactState.CONTACT_REGISTRY_INITIATED;
+import static com.ionos.domains.contact.model.CreateContactState.CONTACT_REGISTRY_SUCCESS;
+import static com.ionos.domains.contact.model.CreateContactState.END;
 
 @Configuration
 @EnableStateMachineFactory
-public class CreateContactUsingChoiceStateMachineConfiguration
+public class CreateContactStateMachineConfiguration
 		extends
 			EnumStateMachineConfigurerAdapter<CreateContactState, CreateContactEvent> {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(CreateContactUsingChoiceStateMachineConfiguration.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CreateContactStateMachineConfiguration.class);
 
 	@Autowired
 	private StateMachineRuntimePersister<CreateContactState, CreateContactEvent, String> stateMachineRuntimePersister;
@@ -70,7 +75,8 @@ public class CreateContactUsingChoiceStateMachineConfiguration
 				.state(CreateContactState.CONTACT_PERSISTENCE_INITIATED)
 				.choice(CONTACT_PERSISTENCE_CHOICE)
 
-				.end(END);
+				.end(END)
+				.states(EnumSet.allOf(CreateContactState.class));
 		// @formatter:on
 	}
 
@@ -102,12 +108,12 @@ public class CreateContactUsingChoiceStateMachineConfiguration
 
 				.withExternal()
 					.source(CONTACT_REGISTRY_SUCCESS).target(CreateContactState.CONTACT_PERSISTENCE_INITIATED)
-					.event(CONTACT_PERSISTENCE_INITIATED)
+					.event(CreateContactEvent.CONTACT_PERSISTENCE_INITIATED)
 					.and()
 
 				.withExternal()
 					.source(CreateContactState.CONTACT_PERSISTENCE_INITIATED).target(CONTACT_PERSISTENCE_CHOICE)
-					.event(CONTACT_PERSISTENCE_INITIATED)
+					.event(CreateContactEvent.CONTACT_PERSISTENCE_INITIATED)
 					.and()
 
 				.withChoice()
