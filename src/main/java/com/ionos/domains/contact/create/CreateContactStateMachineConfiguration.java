@@ -4,8 +4,6 @@ import com.ionos.domains.contact.configuration.CreateContactAdapter;
 import com.ionos.domains.contact.model.CreateContactEvent;
 import com.ionos.domains.contact.model.CreateContactState;
 import java.util.EnumSet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,16 +34,11 @@ public class CreateContactStateMachineConfiguration
 		extends
 			EnumStateMachineConfigurerAdapter<CreateContactState, CreateContactEvent> {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(CreateContactStateMachineConfiguration.class);
-
 	@Autowired
 	private StateMachineRuntimePersister<CreateContactState, CreateContactEvent, String> stateMachineRuntimePersister;
 
 	@Autowired
-	private CreateRegistryAction createRegistryAction;
-
-	@Autowired
-	private CreatePersistenceAction createPersistenceAction;
+	private CreateContactAction createContactAction;
 
 	@Override
 	public void configure(StateMachineConfigurationConfigurer<CreateContactState, CreateContactEvent> config)
@@ -92,7 +85,7 @@ public class CreateContactStateMachineConfiguration
 				.withExternal()
 					.source(CONTACT_REGISTRY_INITIATED).target(CONTACT_REGISTRY_CHOICE)
 					.event(CreateContactEvent.CONTACT_REGISTRY_INITIATED)
-					.action(createRegistryAction::contactRegistrySuccess)
+					.action(createContactAction::create)
 					.and()
 
 				.withChoice()
@@ -109,7 +102,7 @@ public class CreateContactStateMachineConfiguration
 				.withExternal()
 					.source(CONTACT_REGISTRY_SUCCESS).target(CreateContactState.CONTACT_PERSISTENCE_INITIATED)
 					.event(CreateContactEvent.CONTACT_PERSISTENCE_INITIATED)
-					.action(createPersistenceAction::persistenceSuccess)
+					.action(createContactAction::create)
 					.and()
 
 				.withJoin()

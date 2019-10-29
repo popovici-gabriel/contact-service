@@ -19,7 +19,7 @@ class CreateContactServiceIT {
     private StateMachineService<CreateContactState, CreateContactEvent> stateMachineService;
 
     @Test
-    void test() throws InterruptedException {
+    void test() {
         // given
         final var instanceId = UUID.randomUUID().toString();
         // when
