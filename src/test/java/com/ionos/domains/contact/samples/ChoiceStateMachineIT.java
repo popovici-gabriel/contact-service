@@ -13,7 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 @ContextConfiguration(classes = ChoiceStateMachine.class)
 @SpringBootTest
-public class ChoiceTest {
+public class ChoiceStateMachineIT {
 
     @Autowired
     private StateMachine<CreateContactState, CreateContactEvent> stateMachine;
