@@ -111,15 +111,19 @@ public class CreateContactStateMachineConfiguration
 					.event(CreateContactEvent.CONTACT_PERSISTENCE_INITIATED)
 					.and()
 
-				.withExternal()
+				.withJoin()
 					.source(CreateContactState.CONTACT_PERSISTENCE_INITIATED).target(CONTACT_PERSISTENCE_CHOICE)
-					.event(CreateContactEvent.CONTACT_PERSISTENCE_INITIATED)
 					.and()
 
 				.withChoice()
 					.source(CONTACT_PERSISTENCE_CHOICE)
-					.first(CONTACT_PERSISTENCE_SUCCESS, createPersistenceChoice())
+					.first(CONTACT_PERSISTENCE_SUCCESS, context -> true)
 					.last(CONTACT_PERSISTENCE_ERROR)
+					.and()
+
+				.withExternal()
+					.source(CONTACT_PERSISTENCE_ERROR).target(END)
+					.event(STOP)
 					.and()
 
 				.withExternal()

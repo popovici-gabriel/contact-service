@@ -2,17 +2,13 @@ package com.ionos.domains.contact.create;
 
 import com.ionos.domains.contact.model.CreateContactEvent;
 import com.ionos.domains.contact.model.CreateContactState;
-import com.ionos.domains.contact.model.Transition;
-import com.ionos.domains.contact.model.TransitionError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.service.StateMachineService;
 import org.springframework.stereotype.Service;
-
-import static com.ionos.domains.contact.model.MessageHeaders.INSTANCE_ID;
 import static java.util.Objects.requireNonNull;
+import static org.springframework.messaging.support.MessageBuilder.withPayload;
 
 @Service
 public class CreateContactService {
@@ -26,27 +22,21 @@ public class CreateContactService {
         this.stateMachineService = requireNonNull(stateMachineService);
     }
 
-    String startCreateContact(String instanceId) {
+    public String startCreateContact(String instanceId) {
         // @formatter:off
-        final var stateMachine = stateMachineService
-                .acquireStateMachine(instanceId, true);
+        final var stateMachine = stateMachineService.acquireStateMachine(instanceId, true);
 
-        stateMachine.sendEvent(MessageBuilder
-                .withPayload(CreateContactEvent.START)
-                .setHeaderIfAbsent(INSTANCE_ID.name(), instanceId)
-                .build());
-
-        stateMachine.sendEvent(MessageBuilder
-                .withPayload(CreateContactEvent.CONTACT_REGISTRY_INITIATED)
-                .setHeaderIfAbsent(INSTANCE_ID.name(), instanceId)
-                .build());
+        stateMachine.sendEvent(withPayload(CreateContactEvent.START).build());
+        stateMachine.sendEvent(withPayload(CreateContactEvent.CONTACT_REGISTRY_INITIATED).build());
+        stateMachine.sendEvent(withPayload(CreateContactEvent.CONTACT_PERSISTENCE_INITIATED).build());
+        stateMachine.sendEvent(withPayload(CreateContactEvent.STOP).build());
 
         return instanceId;
         // @formatter:on
     }
 
     public CreateContactState getCurrentState(String instanceId) {
-        return stateMachineService.acquireStateMachine(instanceId).getState().getId();
+        return stateMachineService.acquireStateMachine(instanceId, false).getState().getId();
     }
 
 }
