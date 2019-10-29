@@ -45,23 +45,8 @@ public class CreateContactService {
         // @formatter:on
     }
 
-    public void signal(Transition transition) {
-        // @formatter:off
-        if (!stateMachineService
-                .acquireStateMachine(transition.getInstanceId(), false)
-                .sendEvent(MessageBuilder
-                        .withPayload(transition.getEvent())
-                        .setHeaderIfAbsent(INSTANCE_ID.name(), transition.getInstanceId())
-                        .build())) {
-
-            StringBuilder stringBuilder = new StringBuilder("Transition error from: ")
-                    .append(transition.getFrom())
-                    .append(" -> ")
-                    .append(transition.getTo())
-                    .append(" with event: ")
-                    .append(transition.getEvent());
-            throw new TransitionError(stringBuilder.toString());
-        }
-        // @formatter:on
+    public CreateContactState getCurrentState(String instanceId) {
+        return stateMachineService.acquireStateMachine(instanceId).getState().getId();
     }
+
 }

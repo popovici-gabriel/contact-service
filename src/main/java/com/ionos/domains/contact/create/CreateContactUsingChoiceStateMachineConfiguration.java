@@ -87,13 +87,12 @@ public class CreateContactUsingChoiceStateMachineConfiguration
 				.withExternal()
 					.source(CONTACT_REGISTRY_INITIATED).target(CONTACT_REGISTRY_CHOICE)
 					.event(CreateContactEvent.CONTACT_REGISTRY_INITIATED)
-					.action(createRegistryAction::contactRegistryError)
 					.and()
 
 				.withChoice()
 					.source(CONTACT_REGISTRY_CHOICE)
-					.first(CONTACT_REGISTRY_SUCCESS,context -> true,createRegistryAction::test)
-					.last(CONTACT_REGISTRY_ERROR,createRegistryAction::error)
+					.first(CONTACT_REGISTRY_SUCCESS,context -> true)
+					.last(CONTACT_REGISTRY_ERROR)
 					.and()
 
 				.withExternal()

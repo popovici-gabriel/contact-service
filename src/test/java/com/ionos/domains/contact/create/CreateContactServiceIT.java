@@ -24,7 +24,7 @@ class CreateContactServiceIT {
     void test() throws InterruptedException {
         final var instanceId = UUID.randomUUID().toString();
         contactService.startCreateContact(instanceId);
-        Thread.sleep(4_000);
-        System.out.println("stateMachineService = " + stateMachineService.acquireStateMachine(instanceId).getState().getId());
+        final var state = contactService.getCurrentState(instanceId);
+        System.out.println("state = " + state);
     }
 }
