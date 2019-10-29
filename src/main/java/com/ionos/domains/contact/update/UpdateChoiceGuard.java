@@ -1,8 +1,6 @@
 package com.ionos.domains.contact.update;
 
 import com.ionos.domains.contact.model.NotFoundError;
-import com.ionos.domains.contact.model.UpdateContactEvent;
-import com.ionos.domains.contact.model.UpdateContactState;
 import java.util.Optional;
 import org.springframework.statemachine.guard.Guard;
 

@@ -1,9 +1,8 @@
 package com.ionos.domains.contact.samples;
 
-import com.ionos.domains.contact.model.CreateContactEvent;
-import com.ionos.domains.contact.model.CreateContactState;
+import com.ionos.domains.contact.create.CreateContactEvent;
+import com.ionos.domains.contact.create.CreateContactState;
 import java.util.EnumSet;
-import java.util.Optional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.statemachine.config.EnableStateMachine;
 import org.springframework.statemachine.config.EnumStateMachineConfigurerAdapter;

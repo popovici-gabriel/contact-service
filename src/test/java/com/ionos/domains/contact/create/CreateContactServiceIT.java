@@ -1,6 +1,5 @@
 package com.ionos.domains.contact.create;
 
-import com.ionos.domains.contact.model.CreateContactState;
 import java.util.UUID;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;

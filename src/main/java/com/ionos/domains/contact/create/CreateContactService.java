@@ -1,7 +1,5 @@
 package com.ionos.domains.contact.create;
 
-import com.ionos.domains.contact.model.CreateContactEvent;
-import com.ionos.domains.contact.model.CreateContactState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,9 +1,9 @@
 package com.ionos.domains.contact.configuration;
 
-import com.ionos.domains.contact.model.CreateContactEvent;
-import com.ionos.domains.contact.model.CreateContactState;
-import com.ionos.domains.contact.model.UpdateContactEvent;
-import com.ionos.domains.contact.model.UpdateContactState;
+import com.ionos.domains.contact.create.CreateContactEvent;
+import com.ionos.domains.contact.create.CreateContactState;
+import com.ionos.domains.contact.update.UpdateContactEvent;
+import com.ionos.domains.contact.update.UpdateContactState;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.statemachine.data.jpa.JpaPersistingStateMachineInterceptor;

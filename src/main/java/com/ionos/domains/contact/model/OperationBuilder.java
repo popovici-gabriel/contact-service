@@ -1,6 +1,7 @@
 package com.ionos.domains.contact.model;
 
 import static java.util.Optional.ofNullable;
+import com.ionos.domains.contact.create.CreateContactState;
 import java.util.Date;
 import java.util.UUID;
 

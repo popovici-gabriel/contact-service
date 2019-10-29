@@ -1,5 +1,7 @@
 package com.ionos.domains.contact.model;
 
+import com.ionos.domains.contact.create.CreateContactEvent;
+import com.ionos.domains.contact.create.CreateContactState;
 import lombok.Builder;
 import lombok.Data;
 

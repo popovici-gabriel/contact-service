@@ -1,4 +1,4 @@
-package com.ionos.domains.contact.model;
+package com.ionos.domains.contact.update;
 
 /**
  * A state is a statemachine in which a state machine can be. <br/>
@@ -7,7 +7,7 @@ package com.ionos.domains.contact.model;
  * {contact/host/domain}_{registry/persistence}_{success/error/initiated}
  */
 // @formatter:off
-public enum CreateContactState {
+public enum UpdateContactState {
 	START,
 
 	CONTACT_REGISTRY_INITIATED,

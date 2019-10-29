@@ -1,7 +1,7 @@
-package com.ionos.domains.contact.model;
+package com.ionos.domains.contact.create;
 
 // @formatter:off
-public enum UpdateContactEvent {
+public enum CreateContactEvent {
 	START,
 	STOP,
 

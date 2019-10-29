@@ -1,5 +1,6 @@
 package com.ionos.domains.contact.model;
 
+import com.ionos.domains.contact.create.CreateContactState;
 import java.util.Date;
 import java.util.StringJoiner;
 import javax.persistence.Column;

@@ -1,8 +1,6 @@
 package com.ionos.domains.contact.create;
 
 import com.ionos.domains.contact.configuration.LifecycleStateAdapter;
-import com.ionos.domains.contact.model.CreateContactEvent;
-import com.ionos.domains.contact.model.CreateContactState;
 import java.util.EnumSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,15 +16,15 @@ import org.springframework.statemachine.service.DefaultStateMachineService;
 import org.springframework.statemachine.service.StateMachineService;
 import static com.ionos.domains.contact.create.CreateChoiceGuard.createPersistenceChoice;
 import static com.ionos.domains.contact.create.CreateChoiceGuard.createRegistryChoice;
-import static com.ionos.domains.contact.model.CreateContactEvent.STOP;
-import static com.ionos.domains.contact.model.CreateContactState.CONTACT_PERSISTENCE_CHOICE;
-import static com.ionos.domains.contact.model.CreateContactState.CONTACT_PERSISTENCE_ERROR;
-import static com.ionos.domains.contact.model.CreateContactState.CONTACT_PERSISTENCE_SUCCESS;
-import static com.ionos.domains.contact.model.CreateContactState.CONTACT_REGISTRY_CHOICE;
-import static com.ionos.domains.contact.model.CreateContactState.CONTACT_REGISTRY_ERROR;
-import static com.ionos.domains.contact.model.CreateContactState.CONTACT_REGISTRY_INITIATED;
-import static com.ionos.domains.contact.model.CreateContactState.CONTACT_REGISTRY_SUCCESS;
-import static com.ionos.domains.contact.model.CreateContactState.END;
+import static com.ionos.domains.contact.create.CreateContactEvent.STOP;
+import static com.ionos.domains.contact.create.CreateContactState.CONTACT_PERSISTENCE_CHOICE;
+import static com.ionos.domains.contact.create.CreateContactState.CONTACT_PERSISTENCE_ERROR;
+import static com.ionos.domains.contact.create.CreateContactState.CONTACT_PERSISTENCE_SUCCESS;
+import static com.ionos.domains.contact.create.CreateContactState.CONTACT_REGISTRY_CHOICE;
+import static com.ionos.domains.contact.create.CreateContactState.CONTACT_REGISTRY_ERROR;
+import static com.ionos.domains.contact.create.CreateContactState.CONTACT_REGISTRY_INITIATED;
+import static com.ionos.domains.contact.create.CreateContactState.CONTACT_REGISTRY_SUCCESS;
+import static com.ionos.domains.contact.create.CreateContactState.END;
 
 @Configuration
 @EnableStateMachineFactory(name = "createStateMachineFactory")

@@ -2,7 +2,7 @@ package com.ionos.domains.contact.event;
 
 import java.util.Date;
 import java.util.StringJoiner;
-import com.ionos.domains.contact.model.CreateContactEvent;
+import com.ionos.domains.contact.create.CreateContactEvent;
 
 public class Event {
 

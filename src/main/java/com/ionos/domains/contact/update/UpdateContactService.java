@@ -1,7 +1,5 @@
 package com.ionos.domains.contact.update;
 
-import com.ionos.domains.contact.model.UpdateContactEvent;
-import com.ionos.domains.contact.model.UpdateContactState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

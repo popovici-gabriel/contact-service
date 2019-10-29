@@ -1,7 +1,7 @@
 package com.ionos.domains.contact.samples;
 
-import com.ionos.domains.contact.model.CreateContactEvent;
-import com.ionos.domains.contact.model.CreateContactState;
+import com.ionos.domains.contact.create.CreateContactEvent;
+import com.ionos.domains.contact.create.CreateContactState;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,8 +1,6 @@
 package com.ionos.domains.contact.update;
 
 import com.ionos.domains.contact.configuration.LifecycleStateAdapter;
-import com.ionos.domains.contact.model.UpdateContactEvent;
-import com.ionos.domains.contact.model.UpdateContactState;
 import java.util.EnumSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,15 +14,15 @@ import org.springframework.statemachine.config.builders.StateMachineTransitionCo
 import org.springframework.statemachine.persist.StateMachineRuntimePersister;
 import org.springframework.statemachine.service.DefaultStateMachineService;
 import org.springframework.statemachine.service.StateMachineService;
-import static com.ionos.domains.contact.model.UpdateContactEvent.STOP;
-import static com.ionos.domains.contact.model.UpdateContactState.CONTACT_PERSISTENCE_CHOICE;
-import static com.ionos.domains.contact.model.UpdateContactState.CONTACT_PERSISTENCE_ERROR;
-import static com.ionos.domains.contact.model.UpdateContactState.CONTACT_PERSISTENCE_SUCCESS;
-import static com.ionos.domains.contact.model.UpdateContactState.CONTACT_REGISTRY_CHOICE;
-import static com.ionos.domains.contact.model.UpdateContactState.CONTACT_REGISTRY_ERROR;
-import static com.ionos.domains.contact.model.UpdateContactState.CONTACT_REGISTRY_INITIATED;
-import static com.ionos.domains.contact.model.UpdateContactState.CONTACT_REGISTRY_SUCCESS;
-import static com.ionos.domains.contact.model.UpdateContactState.END;
+import static com.ionos.domains.contact.update.UpdateContactEvent.STOP;
+import static com.ionos.domains.contact.update.UpdateContactState.CONTACT_PERSISTENCE_CHOICE;
+import static com.ionos.domains.contact.update.UpdateContactState.CONTACT_PERSISTENCE_ERROR;
+import static com.ionos.domains.contact.update.UpdateContactState.CONTACT_PERSISTENCE_SUCCESS;
+import static com.ionos.domains.contact.update.UpdateContactState.CONTACT_REGISTRY_CHOICE;
+import static com.ionos.domains.contact.update.UpdateContactState.CONTACT_REGISTRY_ERROR;
+import static com.ionos.domains.contact.update.UpdateContactState.CONTACT_REGISTRY_INITIATED;
+import static com.ionos.domains.contact.update.UpdateContactState.CONTACT_REGISTRY_SUCCESS;
+import static com.ionos.domains.contact.update.UpdateContactState.END;
 import static com.ionos.domains.contact.update.UpdateChoiceGuard.updatePersistenceChoice;
 import static com.ionos.domains.contact.update.UpdateChoiceGuard.updateRegistryChoice;
 
