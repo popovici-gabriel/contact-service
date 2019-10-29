@@ -5,9 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 import org.springframework.statemachine.state.State;
 
-public class CreateContactAdapter extends StateMachineListenerAdapter {
+public class LifecycleStateAdapter extends StateMachineListenerAdapter {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CreateContactAdapter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LifecycleStateAdapter.class);
 
     @Override
     public void stateChanged(State from, State to) {

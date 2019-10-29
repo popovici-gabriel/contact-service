@@ -15,17 +15,17 @@ public class CreateContactService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CreateContactService.class);
 
-    private final StateMachineService<CreateContactState, CreateContactEvent> stateMachineService;
+    private final StateMachineService<CreateContactState, CreateContactEvent> createService;
 
     @Autowired
-    public CreateContactService(StateMachineService<CreateContactState, CreateContactEvent> stateMachineService) {
-        this.stateMachineService = requireNonNull(stateMachineService);
+    public CreateContactService(StateMachineService<CreateContactState, CreateContactEvent> createService) {
+        this.createService = requireNonNull(createService);
     }
 
-    public String startCreateContact(String instanceId) {
+    public String createContact(String instanceId) {
         LOGGER.info("Starting create contact operation with id [{}]", instanceId);
         // @formatter:off
-        final var stateMachine = stateMachineService.acquireStateMachine(instanceId, true);
+        final var stateMachine = createService.acquireStateMachine(instanceId, true);
 
         stateMachine.sendEvent(CreateContactEvent.START);
         stateMachine.sendEvent(MessageBuilder
@@ -38,13 +38,13 @@ public class CreateContactService {
                 .build());
         stateMachine.sendEvent(CreateContactEvent.STOP);
 
-        stateMachineService.releaseStateMachine(instanceId);
+        createService.releaseStateMachine(instanceId);
         return instanceId;
         // @formatter:on
     }
 
     public CreateContactState getCurrentState(String instanceId) {
-        return stateMachineService.acquireStateMachine(instanceId, false).getState().getId();
+        return createService.acquireStateMachine(instanceId, false).getState().getId();
     }
 
 }

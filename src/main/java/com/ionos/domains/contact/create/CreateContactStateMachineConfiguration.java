@@ -1,6 +1,6 @@
 package com.ionos.domains.contact.create;
 
-import com.ionos.domains.contact.configuration.CreateContactAdapter;
+import com.ionos.domains.contact.configuration.LifecycleStateAdapter;
 import com.ionos.domains.contact.model.CreateContactEvent;
 import com.ionos.domains.contact.model.CreateContactState;
 import java.util.EnumSet;
@@ -29,13 +29,13 @@ import static com.ionos.domains.contact.model.CreateContactState.CONTACT_REGISTR
 import static com.ionos.domains.contact.model.CreateContactState.END;
 
 @Configuration
-@EnableStateMachineFactory
+@EnableStateMachineFactory(name = "createStateMachineFactory")
 public class CreateContactStateMachineConfiguration
 		extends
 			EnumStateMachineConfigurerAdapter<CreateContactState, CreateContactEvent> {
 
 	@Autowired
-	private StateMachineRuntimePersister<CreateContactState, CreateContactEvent, String> stateMachineRuntimePersister;
+	private StateMachineRuntimePersister<CreateContactState, CreateContactEvent, String> createStateMachineRuntimePersister;
 
 	@Autowired
 	private CreateContactAction createContactAction;
@@ -47,13 +47,13 @@ public class CreateContactStateMachineConfiguration
 
 		config
 				.withPersistence()
-				.runtimePersister(stateMachineRuntimePersister);
+				.runtimePersister(createStateMachineRuntimePersister);
 
 		config
 				.withConfiguration()
-				.machineId("create-contact-with-choices")
+				.machineId("create-contact")
 				.autoStartup(false)
-				.listener(new CreateContactAdapter());
+				.listener(new LifecycleStateAdapter());
 		// @formatter:on
 	}
 
@@ -127,10 +127,10 @@ public class CreateContactStateMachineConfiguration
 	}
 
 	@Bean
-	public StateMachineService<CreateContactState, CreateContactEvent> stateMachineService(
-			StateMachineFactory<CreateContactState, CreateContactEvent> stateMachineFactory,
-			StateMachineRuntimePersister<CreateContactState, CreateContactEvent, String> stateMachineRuntimePersister) {
-		return new DefaultStateMachineService<>(stateMachineFactory, stateMachineRuntimePersister);
+	public StateMachineService<CreateContactState, CreateContactEvent> createService(
+			StateMachineFactory<CreateContactState, CreateContactEvent> createStateMachineFactory,
+			StateMachineRuntimePersister<CreateContactState, CreateContactEvent, String> createStateMachineRuntimePersister) {
+		return new DefaultStateMachineService<>(createStateMachineFactory, createStateMachineRuntimePersister);
 	}
 
 }

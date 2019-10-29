@@ -13,6 +13,6 @@ public class CreateContactController {
 
     @RequestMapping("/create")
     public String create() {
-        return createContactService.startCreateContact(UUID.randomUUID().toString());
+        return createContactService.createContact(UUID.randomUUID().toString());
     }
 }

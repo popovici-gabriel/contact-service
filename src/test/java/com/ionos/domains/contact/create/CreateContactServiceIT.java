@@ -23,7 +23,7 @@ class CreateContactServiceIT {
         // given
         final var instanceId = UUID.randomUUID().toString();
         // when
-        contactService.startCreateContact(instanceId);
+        contactService.createContact(instanceId);
         // then
         Assertions.assertThat(contactService.getCurrentState(instanceId)).isSameAs(CreateContactState.END);
     }
