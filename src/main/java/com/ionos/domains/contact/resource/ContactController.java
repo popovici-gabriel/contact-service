@@ -8,9 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
+@RequestMapping(path = "/contacts", produces = APPLICATION_JSON_VALUE)
 public class ContactController {
 
     @Autowired
@@ -23,18 +26,18 @@ public class ContactController {
     private DeleteContactService deleteContactService;
 
     @PostMapping
-    public String create() {
-        return createContactService.create(UUID.randomUUID().toString());
+    public InstanceId create() {
+        return InstanceId.builder().id(createContactService.create(UUID.randomUUID().toString())).build();
     }
 
     @PutMapping
-    public String update() {
-        return updateContactService.update(UUID.randomUUID().toString());
+    public InstanceId update() {
+        return InstanceId.builder().id(updateContactService.update(UUID.randomUUID().toString())).build();
     }
 
     @DeleteMapping
-    public String delete() {
-        return deleteContactService.delete(UUID.randomUUID().toString());
+    public InstanceId delete() {
+        return InstanceId.builder().id(deleteContactService.delete(UUID.randomUUID().toString())).build();
     }
 
 
