@@ -1,0 +1,75 @@
+logging:
+  level:
+    root: INFO
+spring:
+  application:
+    name: contact-service
+
+  datasource:
+    url:  jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    jmx-enabled:  true
+    hikari:
+      maximumPoolSize:  5
+      minimumIdle:  2
+      poolName: ContactServicePool
+
+  profiles:
+    active: jpa
+
+  h2:
+    console:
+      enabled: true
+
+  liquibase:
+      enabled: false
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto:  create-drop
+    properties:
+      hibernate:
+        show_sql: true
+        format-sql: true
+  kafka:
+    bootstrap-servers:  localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      key-deserializer:  org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      group-id: contact
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: com.ionos.domains.contact.event
+
+
+security:
+  basic:
+    enabled: false
+
+management:
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+api:
+  username: admin
+  password: admin
+
