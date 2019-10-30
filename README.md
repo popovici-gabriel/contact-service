@@ -1,5 +1,19 @@
 # Contact Service
+Modeling a RESTfull API using Finite Statemachine (FSM - https://en.wikipedia.org/wiki/Finite-state_machine ) using Spring Statemachine (SSM) framework https://projects.spring.io/spring-statemachine/. 
+Use case: provisioning activities using states and transitions. 
+We simulate a contact resource getting provisioned through the internet registry which gets saved/updated/deleted in our internal store. 
+## Create Contact 
+Here is diagram for the create operation
+ 
+![Create](presentation/Create Contact Diagram.png)
+## Update Contact 
+Here is diagram for the update operation
+ 
+![Update](presentation/Update Contact Diagram.png)
 
+Here is diagram for the delete operation
+ 
+![Delete](presentation/Delete Contact Diagram.png)
 
 ## Technology
 
@@ -33,4 +47,6 @@ Application will be exposed on port 8080 and logs will be available on /logs fol
 File: transitions.log output machine id and state transition information 
 File: contact-service.log is application log file 
 
+An H2 in memory database with web console at http://localhost:8080/h2-console passswordless user sa as authentication
+![H2 Web Console](presentation/H2_web_console.png) 
 
