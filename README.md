@@ -5,15 +5,15 @@ We simulate a contact resource getting provisioned through the internet registry
 ## Create Contact 
 Here is diagram for the create operation
  
-![Create](presentation/Create Contact Diagram.png)
+![Create](presentation/Create_Contact_Diagram.png)
 ## Update Contact 
 Here is diagram for the update operation
  
-![Update](presentation/Update Contact Diagram.png)
+![Update](presentation/Update_Contact_Diagram.png)
 
 Here is diagram for the delete operation
  
-![Delete](presentation/Delete Contact Diagram.png)
+![Delete](presentation/Delete_Contact_Diagram.png)
 
 ## Technology
 
