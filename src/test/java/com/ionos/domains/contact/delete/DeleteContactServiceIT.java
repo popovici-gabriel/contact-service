@@ -13,7 +13,7 @@ class DeleteContactServiceIT {
     private DeleteContactService deleteContactService;
 
     @Test
-    void test() {
+    void shouldDeleteContact() {
         // given
         final var instanceId = UUID.randomUUID().toString();
         // when

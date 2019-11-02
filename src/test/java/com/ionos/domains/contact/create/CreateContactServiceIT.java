@@ -13,7 +13,7 @@ class CreateContactServiceIT {
     private CreateContactService contactService;
 
     @Test
-    void test() {
+    void shouldCreateContact() {
         // given
         final var instanceId = UUID.randomUUID().toString();
         // when

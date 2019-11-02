@@ -7,13 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class UpdateContactServiceTest {
+class UpdateContactServiceIT {
 
     @Autowired
     private UpdateContactService updateService;
 
     @Test
-    void test() {
+    void shouldUpdateContact() {
         // given
         final var instanceId = UUID.randomUUID().toString();
         // when
