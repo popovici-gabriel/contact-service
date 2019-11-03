@@ -30,7 +30,7 @@ public abstract class AbstractBenchmark {
                 .shouldDoGC(true)
                 .shouldFailOnError(true)
                 .resultFormat(ResultFormatType.JSON)
-                .result("/dev/null") // set this to a valid filename if you want reports
+                //.result("/dev/null") // set this to a valid filename if you want reports
                 .shouldFailOnError(true)
                 .jvmArgs("-server")
                 .build();
